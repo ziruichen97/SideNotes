@@ -10,10 +10,49 @@ document.addEventListener('DOMContentLoaded', function() {
   const saveLinkButton = document.getElementById('save-link');
   const cancelAddButton = document.getElementById('cancel-add');
   const aliasInput = document.getElementById('alias');
-  const richTextEditor = document.getElementById('rich-text-editor');
+  const richTextEditorContainer = document.getElementById('rich-text-editor-container');
   const backToMenuButton = document.getElementById('back-to-menu');
 
   console.log('UI elements initialized');
+
+  // Create and append the new editor HTML
+  const editorToolbar = `
+    <div id="editor-toolbar">
+      <button data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+      <button data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+      <button data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+      <button data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+      <button data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+      <button data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+      <button data-command="removeFormat" title="Clear Formatting"><i class="fas fa-remove-format"></i></button>
+      <div class="color-dropdown">
+        <button id="text-color-btn" title="Text Color"><i class="fas fa-font"></i></button>
+        <div class="color-options" id="text-color-options">
+          <button data-color="#000000" style="background-color: #000000;"></button>
+          <button data-color="#0000FF" style="background-color: #0000FF;"></button>
+          <button data-color="#008000" style="background-color: #008000;"></button>
+          <button data-color="#FF0000" style="background-color: #FF0000;"></button>
+          <button data-color="#800080" style="background-color: #800080;"></button>
+        </div>
+      </div>
+      <div class="color-dropdown">
+        <button id="bg-color-btn" title="Background Color"><i class="fas fa-fill-drip"></i></button>
+        <div class="color-options" id="bg-color-options">
+          <button data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></button>
+          <button data-color="#FFFF00" style="background-color: #FFFF00;"></button>
+          <button data-color="#00FFFF" style="background-color: #00FFFF;"></button>
+          <button data-color="#FFA500" style="background-color: #FFA500;"></button>
+          <button data-color="#FFC0CB" style="background-color: #FFC0CB;"></button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const richTextEditor = `<div id="rich-text-editor" contenteditable="true"></div>`;
+
+  richTextEditorContainer.innerHTML = editorToolbar + richTextEditor;
+
+  const richTextEditorElement = document.getElementById('rich-text-editor');
 
   // Function to display saved links
   function displaySavedLinks() {
@@ -30,9 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
   backToMenuButton.addEventListener('click', backToMenuHandler);
 
   // Rich text editor functionality
-  const editorToolbar = document.getElementById('editor-toolbar');
-  editorToolbar.addEventListener('click', editorToolbarHandler);
-  richTextEditor.addEventListener('input', handleEditorInput);
+  document.getElementById('editor-toolbar').addEventListener('click', editorToolbarHandler);
 
   // Load saved links immediately when popup is opened
   loadSavedLinks();
@@ -60,10 +97,10 @@ document.addEventListener('DOMContentLoaded', function() {
           const savedLinks = result.savedLinks || [];
           const existingLink = savedLinks.find(link => link.url === currentTab.url);
           if (existingLink) {
-            richTextEditor.innerHTML = existingLink.notes;
+            richTextEditorElement.innerHTML = existingLink.notes;
             saveLinkButton.textContent = 'Update';
           } else {
-            richTextEditor.innerHTML = '';
+            richTextEditorElement.innerHTML = '';
             saveLinkButton.textContent = 'Save';
           }
         });
@@ -80,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const linkData = {
         url: editUrl || currentTab.url,
         alias: aliasInput.value || currentTab.title,
-        notes: richTextEditor.innerHTML,
+        notes: richTextEditorElement.innerHTML,
         date: new Date().toISOString()
       };
       saveLinkData(linkData);
@@ -99,48 +136,42 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function editorToolbarHandler(e) {
-    if (e.target.tagName === 'BUTTON') {
-      const command = e.target.getAttribute('data-command');
-      document.execCommand(command, false, null);
-    }
-  }
+    e.preventDefault(); // Prevent default behavior
+    e.stopPropagation(); // Stop event propagation
 
-  function handleEditorInput(event) {
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    const startContainer = range.startContainer;
-    
-    if (startContainer.nodeType === Node.TEXT_NODE) {
-      const text = startContainer.textContent;
-      const cursorPosition = range.startOffset;
+    if (e.target.closest('button')) {
+      const button = e.target.closest('button');
+      const command = button.getAttribute('data-command');
       
-      if (text.substr(cursorPosition - 3, 3) === '1. ') {
-        event.preventDefault();
-        document.execCommand('insertOrderedList', false, null);
-        
-        // Remove the "1. " text
-        const newRange = document.createRange();
-        newRange.setStart(startContainer, cursorPosition - 3);
-        newRange.setEnd(startContainer, cursorPosition);
-        newRange.deleteContents();
-        
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      } else if (text.substr(cursorPosition - 2, 2) === '- ') {
-        event.preventDefault();
-        document.execCommand('insertUnorderedList', false, null);
-        
-        // Remove the "- " text
-        const newRange = document.createRange();
-        newRange.setStart(startContainer, cursorPosition - 2);
-        newRange.setEnd(startContainer, cursorPosition);
-        newRange.deleteContents();
-        
-        selection.removeAllRanges();
-        selection.addRange(newRange);
+      if (command === 'createLink') {
+        const url = prompt('Enter the URL:');
+        if (url) document.execCommand(command, false, url);
+      } else if (command) {
+        document.execCommand(command, false, null);
+      } else if (button.id === 'text-color-btn') {
+        toggleColorOptions('text-color-options');
+      } else if (button.id === 'bg-color-btn') {
+        toggleColorOptions('bg-color-options');
+      } else if (button.parentElement.classList.contains('color-options')) {
+        const color = button.getAttribute('data-color');
+        const command = button.parentElement.id === 'text-color-options' ? 'foreColor' : 'hiliteColor';
+        document.execCommand(command, false, color);
+        toggleColorOptions(button.parentElement.id);
       }
     }
   }
+
+  function toggleColorOptions(id) {
+    const options = document.getElementById(id);
+    options.style.display = options.style.display === 'none' ? 'flex' : 'none';
+  }
+
+  // Add click event listener to close color options when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.color-dropdown')) {
+      document.querySelectorAll('.color-options').forEach(el => el.style.display = 'none');
+    }
+  });
 
   function saveLinkData(linkData) {
     chrome.storage.local.get('savedLinks', function(result) {
@@ -191,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resetForm() {
     aliasInput.value = '';
-    richTextEditor.innerHTML = '';
+    richTextEditorElement.innerHTML = '';
     addLinkForm.style.display = 'none';
     mainMenu.style.display = 'block';
   }
@@ -277,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
         reviewLinksList.style.display = 'none';
         addLinkForm.style.display = 'block';
         aliasInput.value = linkToEdit.alias;
-        richTextEditor.innerHTML = linkToEdit.notes;
+        richTextEditorElement.innerHTML = linkToEdit.notes;
         saveLinkButton.setAttribute('data-edit-url', url);
       }
     });

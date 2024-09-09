@@ -103,23 +103,77 @@ button:hover {
   margin-bottom: 5px;
   background-color: #f1f1f1;
   padding: 5px;
-  border-radius: 4px;
+  border-radius: 4px 4px 0 0;
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-bottom: none;
 }
 
-#editor-toolbar button {
+#editor-toolbar button,
+#editor-toolbar select {
   display: inline-block;
   width: auto;
   margin-right: 5px;
-  padding: 5px 10px;
+  margin-bottom: 5px;
+  padding: 5px;
   background-color: #ffffff;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 3px;
+  cursor: pointer;
 }
 
-#editor-toolbar button:hover {
+#editor-toolbar button:hover,
+#editor-toolbar select:hover {
+  background-color: #e0e0e0;
+}
+
+#editor-toolbar select {
+  display: inline-block;
+  width: auto;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#editor-toolbar select:hover {
+  background-color: #e0e0e0;
+}
+
+#editor-toolbar input[type="color"] {
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  visibility: hidden;
+}
+
+#editor-toolbar label[for="text-color"],
+#editor-toolbar label[for="background-color"] {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 28px;
+}
+
+#editor-toolbar label[for="text-color"]:hover,
+#editor-toolbar label[for="background-color"]:hover {
   background-color: #e0e0e0;
 }
 
@@ -129,7 +183,23 @@ button:hover {
   margin-bottom: 10px;
   padding: 10px;
   overflow-y: auto;
-  border-radius: 4px;
+  border-radius: 0 0 4px 4px;
+  background-color: #ffffff;
+}
+
+#rich-text-editor:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Styles for formatted content */
+#rich-text-editor ul, #rich-text-editor ol {
+  margin-left: 20px;
+}
+
+#rich-text-editor a {
+  color: #0000EE;
+  text-decoration: underline;
 }
 
 #alias {
@@ -170,4 +240,33 @@ button:hover {
 
 #back-to-menu {
   margin-bottom: 20px;
+}
+
+.color-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.color-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.color-options button {
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  border: none;
+  cursor: pointer;
+}
+
+#editor-toolbar .color-dropdown > button {
+  padding: 5px 10px;
 }
