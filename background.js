@@ -14,5 +14,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         chrome.runtime.sendMessage({action: "openEditForm", url: request.url});
       }, 100);
     });
+  } else if (request.action === "updatePopupDarkMode") {
+    // Broadcast the dark mode change to all open popups
+    chrome.runtime.sendMessage({action: "updateDarkMode", isDarkMode: request.isDarkMode});
   }
 });

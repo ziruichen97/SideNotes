@@ -168,8 +168,11 @@ function updateNotesDisplay(linkData) {
   darkModeButton.addEventListener('click', function() {
     const isDarkMode = notesElement.classList.toggle('dark-mode');
     updateDarkModeIcon(darkModeButton, isDarkMode);
-    // Save the dark mode preference
-    chrome.storage.local.set({notesDarkMode: isDarkMode});
+    // Save the dark mode preference and update the popup
+    chrome.storage.local.set({notesDarkMode: isDarkMode}, function() {
+      // Send message to background script to update popup
+      chrome.runtime.sendMessage({action: "updatePopupDarkMode", isDarkMode: isDarkMode});
+    });
   });
 
   makeDraggable(notesElement);

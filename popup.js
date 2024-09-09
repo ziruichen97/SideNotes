@@ -82,11 +82,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Add this to the DOMContentLoaded event listener
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "updateDarkMode") {
+      updateDarkMode(request.isDarkMode);
+    }
+  });
+
   // Initialize dark mode
-  if (localStorage.getItem('darkMode') === 'true') {
-    document.body.classList.add('dark-mode');
-    updateContentScriptDarkMode(true);
-  }
+  chrome.storage.local.get('notesDarkMode', function(result) {
+    const isDarkMode = result.notesDarkMode;
+    updateDarkMode(isDarkMode);
+  });
 
   function addLinkHandler() {
     console.log('Add link button clicked');
@@ -143,12 +150,18 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function toggleDarkMode() {
-    console.log('Dark mode toggle clicked');
-    document.body.classList.toggle('dark-mode');
-    const isDarkMode = document.body.classList.contains('dark-mode');
+    const isDarkMode = !document.body.classList.contains('dark-mode');
+    updateDarkMode(isDarkMode);
+  }
+
+  function updateDarkMode(isDarkMode) {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
     localStorage.setItem('darkMode', isDarkMode);
     updateContentScriptDarkMode(isDarkMode);
-    console.log('Dark mode set to:', isDarkMode);
   }
 
   function updateContentScriptDarkMode(isDarkMode) {
@@ -157,6 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.tabs.sendMessage(tabs[0].id, {action: "updateDarkMode", isDarkMode: isDarkMode});
       }
     });
+    // Update the dark mode for saved notes
+    chrome.storage.local.set({notesDarkMode: isDarkMode});
   }
 
   function exportData() {
