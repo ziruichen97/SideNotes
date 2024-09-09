@@ -270,3 +270,96 @@ button:hover {
 #editor-toolbar .color-dropdown > button {
   padding: 5px 10px;
 }
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+body.dark-mode button {
+  background-color: #555;
+  color: #f0f0f0;
+}
+
+body.dark-mode button:hover {
+  background-color: #666;
+}
+
+body.dark-mode #main-menu,
+body.dark-mode #add-link-form,
+body.dark-mode #review-links-list {
+  background-color: #333;
+}
+
+body.dark-mode #editor-toolbar {
+  background-color: #444;
+  border-color: #666;
+}
+
+body.dark-mode #editor-toolbar button,
+body.dark-mode #editor-toolbar select {
+  background-color: #555;
+  color: #f0f0f0;
+  border-color: #777;
+}
+
+body.dark-mode #editor-toolbar button:hover,
+body.dark-mode #editor-toolbar select:hover {
+  background-color: #666;
+}
+
+body.dark-mode #rich-text-editor {
+  background-color: #444;
+  color: #f0f0f0;
+  border-color: #777;
+}
+
+body.dark-mode #alias {
+  background-color: #444;
+  color: #f0f0f0;
+  border-color: #777;
+}
+
+body.dark-mode #review-links-list li {
+  background-color: #444;
+}
+
+body.dark-mode #review-links-list a {
+  color: #8BC34A;
+}
+
+body.dark-mode .color-options {
+  background-color: #444;
+}
+
+body.dark-mode .web-page-saver-notes {
+  background-color: #333;
+  color: #f0f0f0;
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+body.dark-mode .web-page-saver-header {
+  background-color: #555;
+}
+
+body.dark-mode .web-page-saver-content {
+  border-color: #666;
+}
+
+/* Autosave indicator */
+#autosave-indicator {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(76, 175, 80, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: none;
+}
+
+body.dark-mode #autosave-indicator {
+  background-color: rgba(139, 195, 74, 0.8);
+}

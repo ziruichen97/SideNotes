@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const aliasInput = document.getElementById('alias');
   const richTextEditorContainer = document.getElementById('rich-text-editor-container');
   const backToMenuButton = document.getElementById('back-to-menu');
+  const darkModeToggle = document.getElementById('dark-mode-toggle');
+  const exportButton = document.getElementById('export-data');
+  const importButton = document.getElementById('import-data');
 
   console.log('UI elements initialized');
 
@@ -54,19 +57,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const richTextEditorElement = document.getElementById('rich-text-editor');
 
-  // Function to display saved links
-  function displaySavedLinks() {
-    mainMenu.style.display = 'none';
-    reviewLinksList.style.display = 'block';
-    loadSavedLinks();
-  }
-
   // Event listeners
   addLinkButton.addEventListener('click', addLinkHandler);
   reviewLinksButton.addEventListener('click', displaySavedLinks);
   saveLinkButton.addEventListener('click', saveLinkHandler);
   cancelAddButton.addEventListener('click', cancelAddHandler);
   backToMenuButton.addEventListener('click', backToMenuHandler);
+  darkModeToggle.addEventListener('click', toggleDarkMode);
+  exportButton.addEventListener('click', exportData);
+  importButton.addEventListener('click', importData);
+  document.addEventListener('keydown', handleKeyboardShortcuts);
+  richTextEditorElement.addEventListener('input', scheduleAutoSave);
 
   // Rich text editor functionality
   document.getElementById('editor-toolbar').addEventListener('click', editorToolbarHandler);
@@ -81,223 +82,173 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Function definitions
+  // Initialize dark mode
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    updateContentScriptDarkMode(true);
+  }
+
   function addLinkHandler() {
     console.log('Add link button clicked');
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      console.log('Chrome tabs query executed');
       if (tabs[0]) {
         const currentTab = tabs[0];
         mainMenu.style.display = 'none';
         addLinkForm.style.display = 'block';
         aliasInput.value = currentTab.title;
-        
-        chrome.storage.local.get('savedLinks', function(result) {
-          console.log('Chrome storage get executed');
-          const savedLinks = result.savedLinks || [];
-          const existingLink = savedLinks.find(link => link.url === currentTab.url);
-          if (existingLink) {
-            richTextEditorElement.innerHTML = existingLink.notes;
-            saveLinkButton.textContent = 'Update';
-          } else {
-            richTextEditorElement.innerHTML = '';
-            saveLinkButton.textContent = 'Save';
-          }
-        });
+        richTextEditorElement.innerHTML = '';
+        console.log('Switched to add link form');
       } else {
         console.error('No active tab found');
       }
     });
   }
 
+  function displaySavedLinks() {
+    console.log('Review links button clicked');
+    mainMenu.style.display = 'none';
+    reviewLinksList.style.display = 'block';
+    loadSavedLinks();
+  }
+
   function saveLinkHandler() {
+    console.log('Save link button clicked');
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      const currentTab = tabs[0];
-      const editUrl = saveLinkButton.getAttribute('data-edit-url');
-      const linkData = {
-        url: editUrl || currentTab.url,
-        alias: aliasInput.value || currentTab.title,
-        notes: `<div class="web-page-saver-notes-content">${richTextEditorElement.innerHTML}</div>`,
-        date: new Date().toISOString()
-      };
-      saveLinkData(linkData);
-      saveLinkButton.removeAttribute('data-edit-url');
+      if (tabs[0]) {
+        const currentTab = tabs[0];
+        const linkData = {
+          url: currentTab.url,
+          alias: aliasInput.value || currentTab.title,
+          notes: richTextEditorElement.innerHTML, // Use innerHTML instead of innerText
+          date: new Date().toISOString()
+        };
+        saveLinkData(linkData);
+      } else {
+        console.error('No active tab found');
+      }
     });
   }
 
   function cancelAddHandler() {
+    console.log('Cancel add button clicked');
     addLinkForm.style.display = 'none';
     mainMenu.style.display = 'block';
   }
 
   function backToMenuHandler() {
+    console.log('Back to menu button clicked');
     reviewLinksList.style.display = 'none';
+    addLinkForm.style.display = 'none';
     mainMenu.style.display = 'block';
   }
 
-  function editorToolbarHandler(e) {
-    e.preventDefault(); // Prevent default behavior
-    e.stopPropagation(); // Stop event propagation
+  function toggleDarkMode() {
+    console.log('Dark mode toggle clicked');
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
+    updateContentScriptDarkMode(isDarkMode);
+    console.log('Dark mode set to:', isDarkMode);
+  }
 
-    if (e.target.closest('button')) {
-      const button = e.target.closest('button');
-      const command = button.getAttribute('data-command');
-      
-      if (command === 'createLink') {
-        const url = prompt('Enter the URL:');
-        if (url) document.execCommand(command, false, url);
-      } else if (command) {
-        document.execCommand(command, false, null);
-      } else if (button.id === 'text-color-btn') {
-        toggleColorOptions('text-color-options');
-      } else if (button.id === 'bg-color-btn') {
-        toggleColorOptions('bg-color-options');
-      } else if (button.parentElement.classList.contains('color-options')) {
-        const color = button.getAttribute('data-color');
-        const command = button.parentElement.id === 'text-color-options' ? 'foreColor' : 'hiliteColor';
-        document.execCommand(command, false, color);
-        toggleColorOptions(button.parentElement.id);
+  function updateContentScriptDarkMode(isDarkMode) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "updateDarkMode", isDarkMode: isDarkMode});
       }
-    }
+    });
   }
 
-  function toggleColorOptions(id) {
-    const options = document.getElementById(id);
-    options.style.display = options.style.display === 'none' ? 'flex' : 'none';
-  }
-
-  // Add click event listener to close color options when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.color-dropdown')) {
-      document.querySelectorAll('.color-options').forEach(el => el.style.display = 'none');
-    }
-  });
-
-  function saveLinkData(linkData) {
+  function exportData() {
+    console.log('Export button clicked');
     chrome.storage.local.get('savedLinks', function(result) {
-      let savedLinks = result.savedLinks || [];
-      const existingLinkIndex = savedLinks.findIndex(link => link.url === linkData.url);
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result.savedLinks));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", "web_page_saver_export.json");
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+      console.log('Data exported');
+    });
+  }
+
+  function importData() {
+    console.log('Import button clicked');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedLinks = JSON.parse(e.target.result);
+          chrome.storage.local.set({savedLinks: importedLinks}, function() {
+            console.log('Data imported successfully');
+            loadSavedLinks();
+          });
+        } catch (error) {
+          console.error('Error importing data:', error);
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
+  function loadSavedLinks() {
+    console.log('Loading saved links');
+    chrome.storage.local.get('savedLinks', function(result) {
+      const savedLinks = result.savedLinks || [];
+      reviewLinksList.innerHTML = '<button id="back-to-menu">Back to Menu</button>';
+      savedLinks.forEach(link => {
+        const linkElement = document.createElement('div');
+        linkElement.innerHTML = `
+          <a href="${link.url}" target="_blank">${link.alias || link.url}</a>
+          <button class="edit-link" data-url="${link.url}">Edit</button>
+          <button class="delete-link" data-url="${link.url}">Delete</button>
+        `;
+        reviewLinksList.appendChild(linkElement);
+      });
+      console.log('Saved links loaded:', savedLinks.length);
       
-      if (existingLinkIndex !== -1) {
-        // Update existing link
-        savedLinks[existingLinkIndex] = linkData;
-      } else {
-        // Add new link
-        savedLinks.push(linkData);
-      }
+      // Re-add event listener for the new "Back to Menu" button
+      document.getElementById('back-to-menu').addEventListener('click', backToMenuHandler);
       
-      chrome.storage.local.set({savedLinks: savedLinks}, function() {
-        console.log('Link saved/updated:', linkData);
-        // Show confirmation message
-        showMessage('Link saved successfully!');
-        // Reset form and return to main menu
-        resetForm();
-        
-        // Notify content script to update the notes
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          if (tabs[0]) {
-            console.log('Sending updateNotes message to content script');
-            chrome.tabs.sendMessage(tabs[0].id, {action: "updateNotes", linkData: linkData}, function(response) {
-              if (chrome.runtime.lastError) {
-                console.error('Error sending message:', chrome.runtime.lastError);
-              } else {
-                console.log('Message sent successfully');
-              }
-              // Close the popup after sending the message
-              window.close();
-            });
-          } else {
-            console.error('No active tab found');
-            window.close();
-          }
+      // Add event listeners for edit and delete buttons
+      document.querySelectorAll('.edit-link').forEach(button => {
+        button.addEventListener('click', function() {
+          editLink(this.getAttribute('data-url'));
+        });
+      });
+      document.querySelectorAll('.delete-link').forEach(button => {
+        button.addEventListener('click', function() {
+          deleteLink(this.getAttribute('data-url'));
         });
       });
     });
   }
 
-  function showMessage(message) {
-    const messageElement = document.createElement('div');
-    messageElement.textContent = message;
-    messageElement.className = 'message';
-    document.body.appendChild(messageElement);
-    setTimeout(() => messageElement.remove(), 3000);
-  }
-
-  function resetForm() {
-    aliasInput.value = '';
-    richTextEditorElement.innerHTML = '';
-    addLinkForm.style.display = 'none';
-    mainMenu.style.display = 'block';
-  }
-
-  function loadSavedLinks() {
+  function saveLinkData(linkData) {
     chrome.storage.local.get('savedLinks', function(result) {
-      const savedLinks = result.savedLinks || [];
-      console.log('Loaded saved links:', savedLinks);
-      
-      // Clear existing content
-      reviewLinksList.innerHTML = '<button id="back-to-menu">Back to Menu</button>';
-      
-      if (savedLinks.length === 0) {
-        reviewLinksList.innerHTML += '<p>No saved links yet.</p>';
+      let savedLinks = result.savedLinks || [];
+      const existingLinkIndex = savedLinks.findIndex(link => link.url === linkData.url);
+      if (existingLinkIndex !== -1) {
+        savedLinks[existingLinkIndex] = linkData;
       } else {
-        // Sort links by date (newest first)
-        savedLinks.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
-        // Group links by date
-        const groupedLinks = groupByDate(savedLinks);
-        
-        for (const [date, links] of Object.entries(groupedLinks)) {
-          const dateHeader = document.createElement('h3');
-          dateHeader.textContent = new Date(date).toLocaleDateString();
-          reviewLinksList.appendChild(dateHeader);
-          
-          const linkList = document.createElement('ul');
-          links.forEach(link => {
-            const linkItem = document.createElement('li');
-            linkItem.innerHTML = `
-              <a href="${link.url}" target="_blank">${link.alias || link.url}</a>
-              <button class="edit-link" data-url="${link.url}">Edit</button>
-              <button class="delete-link" data-url="${link.url}">Delete</button>
-            `;
-            linkList.appendChild(linkItem);
-          });
-          reviewLinksList.appendChild(linkList);
-        }
+        savedLinks.push(linkData);
       }
-      
-      // Add event listeners for edit and delete buttons
-      addLinkActionListeners();
-      
-      // Add event listener for the "Back to Menu" button
-      const backToMenuButton = document.getElementById('back-to-menu');
-      backToMenuButton.addEventListener('click', backToMenuHandler);
-    });
-  }
-
-  function groupByDate(links) {
-    return links.reduce((groups, link) => {
-      const date = new Date(link.date).toDateString();
-      if (!groups[date]) {
-        groups[date] = [];
-      }
-      groups[date].push(link);
-      return groups;
-    }, {});
-  }
-
-  function addLinkActionListeners() {
-    document.querySelectorAll('.edit-link').forEach(button => {
-      button.addEventListener('click', function() {
-        const url = this.getAttribute('data-url');
-        editLink(url);
-      });
-    });
-    
-    document.querySelectorAll('.delete-link').forEach(button => {
-      button.addEventListener('click', function() {
-        const url = this.getAttribute('data-url');
-        deleteLink(url);
+      chrome.storage.local.set({savedLinks: savedLinks}, function() {
+        console.log('Link saved:', linkData);
+        addLinkForm.style.display = 'none';
+        mainMenu.style.display = 'block';
+        // Update the notes display in the content script
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          if (tabs[0]) {
+            chrome.tabs.sendMessage(tabs[0].id, {action: "updateNotes", linkData: linkData});
+          }
+        });
       });
     });
   }
@@ -323,10 +274,44 @@ document.addEventListener('DOMContentLoaded', function() {
         let savedLinks = result.savedLinks || [];
         savedLinks = savedLinks.filter(link => link.url !== url);
         chrome.storage.local.set({savedLinks: savedLinks}, function() {
-          showMessage('Link deleted successfully!');
+          console.log('Link deleted');
           loadSavedLinks();
         });
       });
     }
   }
+
+  function handleKeyboardShortcuts(e) {
+    if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      saveLinkHandler();
+    }
+  }
+
+  function scheduleAutoSave() {
+    // Implement autosave functionality here
+  }
+
+  function editorToolbarHandler(e) {
+    if (e.target.closest('button')) {
+      const button = e.target.closest('button');
+      const command = button.getAttribute('data-command');
+      if (command) {
+        e.preventDefault(); // Prevent default action
+        if (command === 'createLink') {
+          const url = prompt('Enter the URL:');
+          if (url) document.execCommand(command, false, url);
+        } else if (command === 'insertUnorderedList' || command === 'insertOrderedList') {
+          // Special handling for list commands
+          document.execCommand(command, false, null);
+          // Force focus back to the editor
+          richTextEditorElement.focus();
+        } else {
+          document.execCommand(command, false, null);
+        }
+      }
+    }
+  }
+
+  console.log('All event listeners added');
 });

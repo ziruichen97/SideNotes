@@ -48,10 +48,13 @@ function injectStyles() {
       font-size: 14px;
       line-height: 1.5;
     }
+    .web-page-saver-notes-content * {
+      max-width: 100%;
+    }
     .web-page-saver-notes-content ul,
     .web-page-saver-notes-content ol {
-      padding-left: 20px !important;
-      margin: 10px 0 !important;
+      padding-left: 20px;
+      margin: 10px 0;
     }
     .web-page-saver-notes-content ul {
       list-style-type: disc !important;
@@ -61,13 +64,42 @@ function injectStyles() {
     }
     .web-page-saver-notes-content li {
       display: list-item !important;
-      margin-bottom: 5px !important;
+      margin-bottom: 5px;
     }
     .web-page-saver-notes-content ul li {
       list-style-type: disc !important;
     }
     .web-page-saver-notes-content ol li {
       list-style-type: decimal !important;
+    }
+    .web-page-saver-notes-content a {
+      color: #0000EE;
+      text-decoration: underline;
+    }
+    .web-page-saver-notes-content strong,
+    .web-page-saver-notes-content b {
+      font-weight: bold;
+    }
+    .web-page-saver-notes-content em,
+    .web-page-saver-notes-content i {
+      font-style: italic;
+    }
+    .web-page-saver-notes-content u {
+      text-decoration: underline;
+    }
+    .web-page-saver-notes.dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+    .web-page-saver-notes.dark-mode .web-page-saver-header {
+      background-color: #222;
+    }
+    .web-page-saver-notes.dark-mode .web-page-saver-content {
+      border-color: #666;
+      background-color: #444;
+    }
+    .web-page-saver-notes.dark-mode .web-page-saver-notes-content a {
+      color: #8BC34A;
     }
   `;
   document.head.appendChild(style);
@@ -98,6 +130,9 @@ function updateNotesDisplay(linkData) {
     <div class="web-page-saver-header">
       <span>Saved Notes</span>
       <div>
+        <button class="web-page-saver-dark-mode" title="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+        </button>
         <button class="web-page-saver-edit" title="Edit Notes">
           <i class="fas fa-edit"></i>
         </button>
@@ -113,6 +148,7 @@ function updateNotesDisplay(linkData) {
 
   const toggleButton = notesElement.querySelector('.web-page-saver-toggle');
   const editButton = notesElement.querySelector('.web-page-saver-edit');
+  const darkModeButton = notesElement.querySelector('.web-page-saver-dark-mode');
   const content = notesElement.querySelector('.web-page-saver-content');
 
   toggleButton.addEventListener('click', function() {
@@ -129,7 +165,26 @@ function updateNotesDisplay(linkData) {
     chrome.runtime.sendMessage({action: "openPopup", url: window.location.href});
   });
 
+  darkModeButton.addEventListener('click', function() {
+    const isDarkMode = notesElement.classList.toggle('dark-mode');
+    updateDarkModeIcon(darkModeButton, isDarkMode);
+    // Save the dark mode preference
+    chrome.storage.local.set({notesDarkMode: isDarkMode});
+  });
+
   makeDraggable(notesElement);
+
+  // Check and apply saved dark mode preference
+  chrome.storage.local.get('notesDarkMode', function(result) {
+    if (result.notesDarkMode) {
+      notesElement.classList.add('dark-mode');
+      updateDarkModeIcon(darkModeButton, true);
+    }
+  });
+}
+
+function updateDarkModeIcon(button, isDarkMode) {
+  button.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 }
 
 function makeDraggable(element) {
@@ -164,7 +219,7 @@ function makeDraggable(element) {
 
 function checkForSavedNotes() {
   console.log('Checking for saved notes');
-  chrome.storage.local.get('savedLinks', function(result) {
+  chrome.storage.local.get(['savedLinks', 'notesDarkMode'], function(result) {
     console.log('Saved links:', result.savedLinks);
     const savedLinks = result.savedLinks || [];
     const currentUrl = window.location.href;
@@ -173,16 +228,41 @@ function checkForSavedNotes() {
     if (savedLink) {
       console.log('Found saved link for current URL:', savedLink);
       updateNotesDisplay(savedLink);
+      
+      // Apply dark mode if it's enabled
+      if (result.notesDarkMode) {
+        updateDarkMode(true);
+      }
     } else {
       console.log('No saved link found for current URL');
     }
   });
 }
 
+function updateDarkMode(isDarkMode) {
+  const notesElement = document.querySelector('.web-page-saver-notes');
+  if (notesElement) {
+    if (isDarkMode) {
+      notesElement.classList.add('dark-mode');
+    } else {
+      notesElement.classList.remove('dark-mode');
+    }
+    const darkModeButton = notesElement.querySelector('.web-page-saver-dark-mode');
+    updateDarkModeIcon(darkModeButton, isDarkMode);
+  }
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Message received in content script:', request);
   if (request.action === "updateNotes") {
     updateNotesDisplay(request.linkData);
+  } else if (request.action === "toggleNotesVisibility") {
+    const notesElement = document.querySelector('.web-page-saver-notes');
+    if (notesElement) {
+      notesElement.style.display = notesElement.style.display === 'none' ? 'block' : 'none';
+    }
+  } else if (request.action === "updateDarkMode") {
+    updateDarkMode(request.isDarkMode);
   }
 });
 
