@@ -19,81 +19,85 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('UI elements initialized');
 
   // Create and append the new editor HTML
-  const editorToolbar = `
-    <div id="editor-toolbar">
-      <button data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
-      <button data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
-      <button data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
-      <button data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
-      <button data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
-      <button data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
-      <button data-command="removeFormat" title="Clear Formatting"><i class="fas fa-remove-format"></i></button>
-      <div class="color-dropdown">
-        <button id="text-color-btn" title="Text Color"><i class="fas fa-font"></i></button>
-        <div class="color-options" id="text-color-options">
-          <button data-color="#000000" style="background-color: #000000;"></button>
-          <button data-color="#0000FF" style="background-color: #0000FF;"></button>
-          <button data-color="#008000" style="background-color: #008000;"></button>
-          <button data-color="#FF0000" style="background-color: #FF0000;"></button>
-          <button data-color="#800080" style="background-color: #800080;"></button>
-        </div>
-      </div>
-      <div class="color-dropdown">
-        <button id="bg-color-btn" title="Background Color"><i class="fas fa-fill-drip"></i></button>
-        <div class="color-options" id="bg-color-options">
-          <button data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></button>
-          <button data-color="#FFFF00" style="background-color: #FFFF00;"></button>
-          <button data-color="#00FFFF" style="background-color: #00FFFF;"></button>
-          <button data-color="#FFA500" style="background-color: #FFA500;"></button>
-          <button data-color="#FFC0CB" style="background-color: #FFC0CB;"></button>
-        </div>
-      </div>
-    </div>
-  `;
-
+  const editorToolbar = createEditorToolbar();
   const richTextEditor = `<div id="rich-text-editor" contenteditable="true"></div>`;
-
   richTextEditorContainer.innerHTML = editorToolbar + richTextEditor;
-
   const richTextEditorElement = document.getElementById('rich-text-editor');
 
-  // Event listeners
-  addLinkButton.addEventListener('click', addLinkHandler);
-  reviewLinksButton.addEventListener('click', displaySavedLinks);
-  saveLinkButton.addEventListener('click', saveLinkHandler);
-  cancelAddButton.addEventListener('click', cancelAddHandler);
-  backToMenuButton.addEventListener('click', backToMenuHandler);
-  darkModeToggle.addEventListener('click', toggleDarkMode);
-  exportButton.addEventListener('click', exportData);
-  importButton.addEventListener('click', importData);
-  document.addEventListener('keydown', handleKeyboardShortcuts);
-  richTextEditorElement.addEventListener('input', scheduleAutoSave);
-
-  // Rich text editor functionality
-  document.getElementById('editor-toolbar').addEventListener('click', editorToolbarHandler);
+  // Add event listeners
+  addEventListeners();
 
   // Load saved links immediately when popup is opened
   loadSavedLinks();
 
-  // Message listener for opening edit form
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "openEditForm") {
-      editLink(request.url);
-    }
-  });
-
-  // Add this to the DOMContentLoaded event listener
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "updateDarkMode") {
-      updateDarkMode(request.isDarkMode);
-    }
-  });
-
   // Initialize dark mode
-  chrome.storage.local.get('notesDarkMode', function(result) {
-    const isDarkMode = result.notesDarkMode;
-    updateDarkMode(isDarkMode);
-  });
+  initializeDarkMode();
+
+  // Rich text editor functionality
+  document.getElementById('editor-toolbar').addEventListener('click', editorToolbarHandler);
+
+  function createEditorToolbar() {
+    return `
+      <div id="editor-toolbar">
+        <button data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+        <button data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+        <button data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+        <button data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+        <button data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+        <button data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+        <button data-command="removeFormat" title="Clear Formatting"><i class="fas fa-remove-format"></i></button>
+        <div class="color-dropdown">
+          <button id="text-color-btn" title="Text Color"><i class="fas fa-font"></i></button>
+          <div class="color-options" id="text-color-options">
+            <button data-color="#000000" style="background-color: #000000;"></button>
+            <button data-color="#0000FF" style="background-color: #0000FF;"></button>
+            <button data-color="#008000" style="background-color: #008000;"></button>
+            <button data-color="#FF0000" style="background-color: #FF0000;"></button>
+            <button data-color="#800080" style="background-color: #800080;"></button>
+          </div>
+        </div>
+        <div class="color-dropdown">
+          <button id="bg-color-btn" title="Background Color"><i class="fas fa-fill-drip"></i></button>
+          <div class="color-options" id="bg-color-options">
+            <button data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></button>
+            <button data-color="#FFFF00" style="background-color: #FFFF00;"></button>
+            <button data-color="#00FFFF" style="background-color: #00FFFF;"></button>
+            <button data-color="#FFA500" style="background-color: #FFA500;"></button>
+            <button data-color="#FFC0CB" style="background-color: #FFC0CB;"></button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function addEventListeners() {
+    addLinkButton.addEventListener('click', addLinkHandler);
+    reviewLinksButton.addEventListener('click', displaySavedLinks);
+    saveLinkButton.addEventListener('click', saveLinkHandler);
+    cancelAddButton.addEventListener('click', cancelAddHandler);
+    backToMenuButton.addEventListener('click', backToMenuHandler);
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+    exportButton.addEventListener('click', exportData);
+    importButton.addEventListener('click', importData);
+    document.addEventListener('keydown', handleKeyboardShortcuts);
+    richTextEditorElement.addEventListener('input', scheduleAutoSave);
+
+    // Message listeners
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.action === "openEditForm") {
+        editLink(request.url);
+      } else if (request.action === "updateDarkMode") {
+        updateDarkMode(request.isDarkMode);
+      }
+    });
+  }
+
+  function initializeDarkMode() {
+    chrome.storage.local.get('notesDarkMode', function(result) {
+      const isDarkMode = result.notesDarkMode;
+      updateDarkMode(isDarkMode);
+    });
+  }
 
   function addLinkHandler() {
     console.log('Add link button clicked');
