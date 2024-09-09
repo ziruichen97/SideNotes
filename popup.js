@@ -1,3 +1,4 @@
+// Event listener for when the DOM content is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOMContentLoaded event fired');
 
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Rich text editor functionality
   document.getElementById('editor-toolbar').addEventListener('click', editorToolbarHandler);
 
+  // Function to create the editor toolbar HTML
   function createEditorToolbar() {
     return `
       <div id="editor-toolbar">
@@ -70,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
   }
 
+  // Function to add all event listeners
   function addEventListeners() {
     addLinkButton.addEventListener('click', addLinkHandler);
     reviewLinksButton.addEventListener('click', displaySavedLinks);
@@ -92,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Function to initialize dark mode
   function initializeDarkMode() {
     chrome.storage.local.get('notesDarkMode', function(result) {
       const isDarkMode = result.notesDarkMode;
@@ -99,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Handler for adding a new link or editing an existing one
   function addLinkHandler() {
     console.log('Add link button clicked');
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -128,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Function to display saved links
   function displaySavedLinks() {
     console.log('Review links button clicked');
     mainMenu.style.display = 'none';
@@ -135,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadSavedLinks();
   }
 
+  // Handler for saving a link
   function saveLinkHandler() {
     console.log('Save link button clicked');
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -153,12 +160,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Handler for canceling link addition
   function cancelAddHandler() {
     console.log('Cancel add button clicked');
     addLinkForm.style.display = 'none';
     mainMenu.style.display = 'block';
   }
 
+  // Handler for returning to the main menu
   function backToMenuHandler() {
     console.log('Back to menu button clicked');
     reviewLinksList.style.display = 'none';
@@ -166,11 +175,13 @@ document.addEventListener('DOMContentLoaded', function() {
     mainMenu.style.display = 'block';
   }
 
+  // Function to toggle dark mode
   function toggleDarkMode() {
     const isDarkMode = !document.body.classList.contains('dark-mode');
     updateDarkMode(isDarkMode);
   }
 
+  // Function to update dark mode
   function updateDarkMode(isDarkMode) {
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
@@ -181,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateContentScriptDarkMode(isDarkMode);
   }
 
+  // Function to update dark mode in content script
   function updateContentScriptDarkMode(isDarkMode) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       if (tabs[0]) {
@@ -191,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.set({notesDarkMode: isDarkMode});
   }
 
+  // Function to export data
   function exportData() {
     console.log('Export button clicked');
     chrome.storage.local.get('savedLinks', function(result) {
@@ -205,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Function to import data
   function importData() {
     console.log('Import button clicked');
     const input = document.createElement('input');
@@ -229,6 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
     input.click();
   }
 
+  // Function to load and display saved links
   function loadSavedLinks() {
     console.log('Loading saved links');
     chrome.storage.local.get('savedLinks', function(result) {
@@ -262,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Function to save link data
   function saveLinkData(linkData) {
     chrome.storage.local.get('savedLinks', function(result) {
       let savedLinks = result.savedLinks || [];
@@ -285,6 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Function to edit an existing link
   function editLink(url) {
     chrome.storage.local.get('savedLinks', function(result) {
       const savedLinks = result.savedLinks || [];
@@ -300,6 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Function to delete a link
   function deleteLink(url) {
     if (confirm('Are you sure you want to delete this link?')) {
       chrome.storage.local.get('savedLinks', function(result) {
@@ -313,6 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Function to handle keyboard shortcuts
   function handleKeyboardShortcuts(e) {
     if (e.ctrlKey && e.key === 's') {
       e.preventDefault();
@@ -320,10 +339,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Function to schedule autosave (to be implemented)
   function scheduleAutoSave() {
-    // Implement autosave functionality here
+    // TODO: Implement autosave functionality
   }
 
+  // Handler for editor toolbar actions
   function editorToolbarHandler(e) {
     if (e.target.closest('button')) {
       const button = e.target.closest('button');

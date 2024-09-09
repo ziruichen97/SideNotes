@@ -1,8 +1,10 @@
 console.log('Content script loaded');
 
+// Function to inject custom styles into the page
 function injectStyles() {
   const style = document.createElement('style');
   style.textContent = `
+    /* CSS styles for the notes overlay */
     .web-page-saver-notes {
       position: fixed;
       right: 20px;
@@ -105,6 +107,7 @@ function injectStyles() {
   document.head.appendChild(style);
 }
 
+// Function to inject Font Awesome styles
 function injectFontAwesome() {
   const link = document.createElement('link');
   link.href = chrome.runtime.getURL('fontawesome-free-6.6.0-web/css/all.css');
@@ -113,9 +116,11 @@ function injectFontAwesome() {
   document.head.appendChild(link);
 }
 
+// Inject custom styles and Font Awesome
 injectStyles();
 injectFontAwesome();
 
+// Function to update the notes display
 function updateNotesDisplay(linkData) {
   console.log('Updating notes display:', linkData);
   let notesElement = document.querySelector('.web-page-saver-notes');
@@ -186,10 +191,12 @@ function updateNotesDisplay(linkData) {
   });
 }
 
+// Function to update the dark mode icon
 function updateDarkModeIcon(button, isDarkMode) {
   button.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 }
 
+// Function to make the notes overlay draggable
 function makeDraggable(element) {
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   element.querySelector('.web-page-saver-header').addEventListener('mousedown', dragMouseDown, { passive: true });
@@ -220,6 +227,7 @@ function makeDraggable(element) {
   }
 }
 
+// Function to check for saved notes and display them
 function checkForSavedNotes() {
   console.log('Checking for saved notes');
   chrome.storage.local.get(['savedLinks', 'notesDarkMode'], function(result) {
@@ -242,6 +250,7 @@ function checkForSavedNotes() {
   });
 }
 
+// Function to update dark mode
 function updateDarkMode(isDarkMode) {
   const notesElement = document.querySelector('.web-page-saver-notes');
   if (notesElement) {
@@ -255,6 +264,7 @@ function updateDarkMode(isDarkMode) {
   }
 }
 
+// Listen for messages from the popup or background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Message received in content script:', request);
   if (request.action === "updateNotes") {

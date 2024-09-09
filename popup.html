@@ -2,10 +2,13 @@
 <html>
 <head>
   <title>Web Page Saver</title>
+  <!-- Link to the main stylesheet -->
   <link rel="stylesheet" href="styles.css">
+  <!-- Link to Font Awesome for icons -->
   <link rel="stylesheet" href="fontawesome-free-6.6.0-web/css/all.css">
 </head>
 <body>
+  <!-- Main menu container -->
   <div id="main-menu">
     <button id="add-link">Add Current Page</button>
     <button id="review-links">Review Saved Links</button>
@@ -13,16 +16,22 @@
     <button id="export-data">Export Data</button>
     <button id="import-data">Import Data</button>
   </div>
+
+  <!-- Form for adding a new link -->
   <div id="add-link-form" style="display: none;">
     <input type="text" id="alias" placeholder="Enter alias (optional)">
     <div id="rich-text-editor-container"></div>
     <button id="save-link">Save</button>
     <button id="cancel-add">Cancel</button>
   </div>
+
+  <!-- Container for reviewing saved links -->
   <div id="review-links-list" style="display: none;">
     <button id="back-to-menu">Back to Menu</button>
     <!-- Links will be dynamically added here -->
   </div>
+
+  <!-- Link to the main JavaScript file -->
   <script src="popup.js"></script>
 </body>
 </html>
