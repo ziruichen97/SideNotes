@@ -100,11 +100,24 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       if (tabs[0]) {
         const currentTab = tabs[0];
-        mainMenu.style.display = 'none';
-        addLinkForm.style.display = 'block';
-        aliasInput.value = currentTab.title;
-        richTextEditorElement.innerHTML = '';
-        console.log('Switched to add link form');
+        // Check if there's already a saved note for this URL
+        chrome.storage.local.get('savedLinks', function(result) {
+          const savedLinks = result.savedLinks || [];
+          const existingLink = savedLinks.find(link => link.url === currentTab.url);
+          
+          if (existingLink) {
+            // If a note exists, go to edit mode
+            console.log('Existing note found, switching to edit mode');
+            editLink(currentTab.url);
+          } else {
+            // If no note exists, proceed with adding a new one
+            mainMenu.style.display = 'none';
+            addLinkForm.style.display = 'block';
+            aliasInput.value = currentTab.title;
+            richTextEditorElement.innerHTML = '';
+            console.log('Switched to add link form');
+          }
+        });
       } else {
         console.error('No active tab found');
       }
