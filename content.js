@@ -43,6 +43,32 @@ function injectStyles() {
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
     }
+    .web-page-saver-notes-content {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .web-page-saver-notes-content ul,
+    .web-page-saver-notes-content ol {
+      padding-left: 20px !important;
+      margin: 10px 0 !important;
+    }
+    .web-page-saver-notes-content ul {
+      list-style-type: disc !important;
+    }
+    .web-page-saver-notes-content ol {
+      list-style-type: decimal !important;
+    }
+    .web-page-saver-notes-content li {
+      display: list-item !important;
+      margin-bottom: 5px !important;
+    }
+    .web-page-saver-notes-content ul li {
+      list-style-type: disc !important;
+    }
+    .web-page-saver-notes-content ol li {
+      list-style-type: decimal !important;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -80,7 +106,9 @@ function updateNotesDisplay(linkData) {
         </button>
       </div>
     </div>
-    <div class="web-page-saver-content">${linkData.notes}</div>
+    <div class="web-page-saver-content">
+      <div class="web-page-saver-notes-content">${linkData.notes}</div>
+    </div>
   `;
 
   const toggleButton = notesElement.querySelector('.web-page-saver-toggle');

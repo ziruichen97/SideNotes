@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const linkData = {
         url: editUrl || currentTab.url,
         alias: aliasInput.value || currentTab.title,
-        notes: richTextEditorElement.innerHTML,
+        notes: `<div class="web-page-saver-notes-content">${richTextEditorElement.innerHTML}</div>`,
         date: new Date().toISOString()
       };
       saveLinkData(linkData);
