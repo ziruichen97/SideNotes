@@ -203,9 +203,12 @@ document.addEventListener('DOMContentLoaded', function() {
               } else {
                 console.log('Message sent successfully');
               }
+              // Close the popup after sending the message
+              window.close();
             });
           } else {
             console.error('No active tab found');
+            window.close();
           }
         });
       });
