@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Web Page Saver",
+  "version": "1.0",
+  "description": "Save webpages for later reading with custom notes.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["fontawesome-free-6.6.0-web/css/all.css", "fontawesome-free-6.6.0-web/webfonts/*", "edit.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

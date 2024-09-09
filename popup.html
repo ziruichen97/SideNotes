@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web Page Saver</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="fontawesome-free-6.6.0-web/css/all.css">
+</head>
+<body>
+  <div id="main-menu">
+    <button id="add-link">Add Current Page</button>
+    <button id="review-links">Review Saved Links</button>
+  </div>
+  <div id="add-link-form" style="display: none;">
+    <input type="text" id="alias" placeholder="Enter alias (optional)">
+    <div id="editor-toolbar">
+      <button data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+      <button data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+      <button data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+      <button data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+      <button data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+    </div>
+    <div id="rich-text-editor" contenteditable="true"></div>
+    <button id="save-link">Save</button>
+    <button id="cancel-add">Cancel</button>
+  </div>
+  <div id="review-links-list" style="display: none;">
+    <button id="back-to-menu">Back to Menu</button>
+    <!-- Links will be dynamically added here -->
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
