@@ -4,7 +4,7 @@ This project uses the following third-party resources:
 
 ## Icons
 
-- Edit icon: 
+- <i class="fa-solid fa-pen-to-square"></i> Edit icon: 
   - Source: [Flaticon](https://www.flaticon.com/free-icons/edit)
   - Creator: Kiranshastry
   - License: [Flaticon License](https://www.freepikcompany.com/legal#nav-flaticon)
@@ -12,7 +12,7 @@ This project uses the following third-party resources:
 
 ## Libraries
 
-- Font Awesome:
+- <i class="fa-brands fa-font-awesome"></i> Font Awesome:
   - Version: 6.6.0
   - License: [Font Awesome Free License](https://fontawesome.com/license/free)
   - Copyright: Fonticons, Inc.

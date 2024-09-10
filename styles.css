@@ -1,5 +1,5 @@
 body {
-  width: 300px;
+  width: 250px; /* Reduced from 300px */
   padding: 10px;
   font-family: Arial, sans-serif;
 }
@@ -9,7 +9,7 @@ button {
   display: block;
   width: 100%;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 8px 12px; /* Reduced padding */
   cursor: pointer;
   background-color: #4CAF50;
   color: white;
@@ -17,10 +17,21 @@ button {
   border-radius: 4px;
   font-size: 14px;
   transition: background-color 0.3s;
+  text-align: left; /* Align text to the left */
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
 }
 
 button:hover {
   background-color: #45a049;
+}
+
+/* Icon styles */
+button i {
+  margin-right: 8px; /* Add some space between icon and text */
+  width: 16px; /* Set a fixed width for icons */
+  text-align: center; /* Center the icon */
 }
 
 /* Saved Notes styles */
@@ -284,6 +295,19 @@ body.dark-mode button {
 
 body.dark-mode button:hover {
   background-color: #666;
+}
+
+/* Dark mode toggle button */
+body.dark-mode #dark-mode-toggle i.fa-moon {
+  display: none;
+}
+
+body.dark-mode #dark-mode-toggle i.fa-sun {
+  display: inline-block;
+}
+
+#dark-mode-toggle i.fa-sun {
+  display: none;
 }
 
 body.dark-mode #main-menu,
