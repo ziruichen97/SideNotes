@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Web Page Saver",
+  "name": "SideNotes",
   "version": "1.0",
   "description": "Save webpages for later reading with custom notes.",
   "permissions": [
@@ -28,5 +28,6 @@
       "resources": ["fontawesome-free-6.6.0-web/css/all.css", "fontawesome-free-6.6.0-web/webfonts/*", "edit.png"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "license": "SEE LICENSE IN LICENSE.md"
 }

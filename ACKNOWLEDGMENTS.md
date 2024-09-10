@@ -1,5 +1,7 @@
 # Acknowledgments
 
+This project, SideNotes, is licensed under a custom license that allows free use and modification for non-commercial purposes. For commercial use, please contact the author. See the LICENSE.md file for full details.
+
 This project uses the following third-party resources:
 
 ## Icons
