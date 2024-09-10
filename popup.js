@@ -93,6 +93,30 @@ document.addEventListener('DOMContentLoaded', function() {
         updateDarkMode(request.isDarkMode);
       }
     });
+
+    // Add event listeners for color dropdowns
+    const textColorBtn = document.getElementById('text-color-btn');
+    const bgColorBtn = document.getElementById('bg-color-btn');
+    const textColorOptions = document.getElementById('text-color-options');
+    const bgColorOptions = document.getElementById('bg-color-options');
+
+    textColorBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleColorOptions(textColorOptions);
+    });
+    bgColorBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleColorOptions(bgColorOptions);
+    });
+
+    textColorOptions.addEventListener('click', (e) => handleColorSelection(e, 'foreColor'));
+    bgColorOptions.addEventListener('click', (e) => handleColorSelection(e, 'hiliteColor'));
+
+    // Close color options when clicking outside
+    document.addEventListener('click', () => {
+      textColorOptions.style.display = 'none';
+      bgColorOptions.style.display = 'none';
+    });
   }
 
   // Function to initialize dark mode
@@ -363,6 +387,19 @@ document.addEventListener('DOMContentLoaded', function() {
           document.execCommand(command, false, null);
         }
       }
+    }
+  }
+
+  function toggleColorOptions(optionsElement) {
+    const isVisible = optionsElement.style.display === 'block';
+    optionsElement.style.display = isVisible ? 'none' : 'block';
+  }
+
+  function handleColorSelection(e, command) {
+    e.stopPropagation();
+    if (e.target.dataset.color) {
+      document.execCommand(command, false, e.target.dataset.color);
+      e.target.closest('.color-options').style.display = 'none';
     }
   }
 
