@@ -11,11 +11,14 @@ function injectStyles() {
       top: 50%;
       transform: translateY(-50%);
       width: 300px;
+      height: 400px;
       font-family: Arial, sans-serif;
       background-color: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       border-radius: 4px;
       z-index: 9999;
+      display: flex;
+      flex-direction: column;
     }
     .web-page-saver-header {
       background-color: #4CAF50;
@@ -37,8 +40,7 @@ function injectStyles() {
       color: white;
     }
     .web-page-saver-content {
-      padding: 10px;
-      max-height: 300px;
+      flex-grow: 1;
       overflow-y: auto;
       border: 1px solid #ccc;
       border-top: none;
@@ -103,6 +105,39 @@ function injectStyles() {
     .web-page-saver-notes.dark-mode .web-page-saver-notes-content a {
       color: #8BC34A;
     }
+    .web-page-saver-resize-handle {
+      position: absolute;
+      background-color: transparent;
+      z-index: 10000;
+    }
+    .web-page-saver-resize-handle.top-left,
+    .web-page-saver-resize-handle.top-right,
+    .web-page-saver-resize-handle.bottom-left,
+    .web-page-saver-resize-handle.bottom-right {
+      width: 10px;
+      height: 10px;
+    }
+    .web-page-saver-resize-handle.top,
+    .web-page-saver-resize-handle.bottom {
+      height: 5px;
+      left: 0;
+      right: 0;
+    }
+    .web-page-saver-resize-handle.left,
+    .web-page-saver-resize-handle.right {
+      width: 5px;
+      top: 0;
+      bottom: 0;
+    }
+    .web-page-saver-resize-handle.top-left { top: -5px; left: -5px; cursor: nwse-resize; }
+    .web-page-saver-resize-handle.top-right { top: -5px; right: -5px; cursor: nesw-resize; }
+    .web-page-saver-resize-handle.bottom-left { bottom: -5px; left: -5px; cursor: nesw-resize; }
+    .web-page-saver-resize-handle.bottom-right { bottom: -5px; right: -5px; cursor: nwse-resize; }
+    .web-page-saver-resize-handle.top { top: -5px; cursor: ns-resize; }
+    .web-page-saver-resize-handle.right { right: -5px; cursor: ew-resize; }
+    .web-page-saver-resize-handle.bottom { bottom: -5px; cursor: ns-resize; }
+    .web-page-saver-resize-handle.left { left: -5px; cursor: ew-resize; }
+    .web-page-saver-resize-handle:hover { background-color: rgba(69, 160, 73, 0.2); }
   `;
   document.head.appendChild(style);
 }
@@ -149,6 +184,14 @@ function updateNotesDisplay(linkData) {
     <div class="web-page-saver-content">
       <div class="web-page-saver-notes-content">${linkData.notes}</div>
     </div>
+    <div class="web-page-saver-resize-handle top-left"></div>
+    <div class="web-page-saver-resize-handle top-right"></div>
+    <div class="web-page-saver-resize-handle bottom-left"></div>
+    <div class="web-page-saver-resize-handle bottom-right"></div>
+    <div class="web-page-saver-resize-handle top"></div>
+    <div class="web-page-saver-resize-handle right"></div>
+    <div class="web-page-saver-resize-handle bottom"></div>
+    <div class="web-page-saver-resize-handle left"></div>
   `;
 
   const toggleButton = notesElement.querySelector('.web-page-saver-toggle');
@@ -181,6 +224,8 @@ function updateNotesDisplay(linkData) {
   });
 
   makeDraggable(notesElement);
+  makeResizable(notesElement);
+  loadSavedSize(notesElement);
 
   // Check and apply saved dark mode preference
   chrome.storage.local.get('notesDarkMode', function(result) {
@@ -218,13 +263,104 @@ function makeDraggable(element) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     element.style.top = (element.offsetTop - pos2) + "px";
-    element.style.left = (element.offsetLeft - pos1) + "px";
+    element.style.left = (element.offsetLeft - pos1) + "px";;
   }
 
   function closeDragElement() {
     document.removeEventListener('mouseup', closeDragElement, { passive: true });
     document.removeEventListener('mousemove', elementDrag, { passive: true });
   }
+}
+
+// Function to make the notes overlay resizable
+function makeResizable(element) {
+  const resizeHandles = element.querySelectorAll('.web-page-saver-resize-handle');
+  const content = element.querySelector('.web-page-saver-content');
+  let isResizing = false;
+  let currentHandle = null;
+  let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+  resizeHandles.forEach(handle => {
+    handle.addEventListener('mousedown', initResize);
+  });
+
+  function initResize(e) {
+    isResizing = true;
+    currentHandle = e.target;
+    startX = e.clientX;
+    startY = e.clientY;
+    startWidth = parseInt(document.defaultView.getComputedStyle(element).width, 10);
+    startHeight = parseInt(document.defaultView.getComputedStyle(element).height, 10);
+    startLeft = element.offsetLeft;
+    startTop = element.offsetTop;
+    document.addEventListener('mousemove', resize);
+    document.addEventListener('mouseup', stopResize);
+    e.preventDefault();
+  }
+
+  function resize(e) {
+    if (!isResizing) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    
+    if (currentHandle.classList.contains('right') || currentHandle.classList.contains('bottom-right') || currentHandle.classList.contains('top-right')) {
+      const newWidth = startWidth + dx;
+      if (newWidth > 200) element.style.width = newWidth + 'px';
+    }
+    if (currentHandle.classList.contains('bottom') || currentHandle.classList.contains('bottom-right') || currentHandle.classList.contains('bottom-left')) {
+      const newHeight = startHeight + dy;
+      if (newHeight > 100) element.style.height = newHeight + 'px';
+    }
+    if (currentHandle.classList.contains('left') || currentHandle.classList.contains('top-left') || currentHandle.classList.contains('bottom-left')) {
+      const newWidth = startWidth - dx;
+      if (newWidth > 200) {
+        element.style.width = newWidth + 'px';
+        element.style.left = startLeft + dx + 'px';
+      }
+    }
+    if (currentHandle.classList.contains('top') || currentHandle.classList.contains('top-left') || currentHandle.classList.contains('top-right')) {
+      const newHeight = startHeight - dy;
+      if (newHeight > 100) {
+        element.style.height = newHeight + 'px';
+        element.style.top = startTop + dy + 'px';
+      }
+    }
+    
+    // Adjust content height
+    const headerHeight = element.querySelector('.web-page-saver-header').offsetHeight;
+    content.style.height = (element.offsetHeight - headerHeight) + 'px';
+  }
+
+  function stopResize() {
+    isResizing = false;
+    document.removeEventListener('mousemove', resize);
+    document.removeEventListener('mouseup', stopResize);
+    saveSize(element);
+  }
+}
+
+// Function to save the size of the notes overlay
+function saveSize(element) {
+  const size = {
+    width: element.offsetWidth,
+    height: element.offsetHeight
+  };
+  chrome.storage.local.set({ notesOverlaySize: size });
+}
+
+// Function to load the saved size of the notes overlay
+function loadSavedSize(element) {
+  chrome.storage.local.get('notesOverlaySize', (result) => {
+    if (result.notesOverlaySize) {
+      element.style.width = `${result.notesOverlaySize.width}px`;
+      element.style.height = `${result.notesOverlaySize.height}px`;
+      
+      // Adjust content height
+      const content = element.querySelector('.web-page-saver-content');
+      const headerHeight = element.querySelector('.web-page-saver-header').offsetHeight;
+      content.style.height = (result.notesOverlaySize.height - headerHeight) + 'px';
+    }
+  });
 }
 
 // Function to check for saved notes and display them

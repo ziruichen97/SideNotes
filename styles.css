@@ -41,46 +41,29 @@ button i {
   top: 50%;
   transform: translateY(-50%);
   width: 300px;
+  height: 400px; /* Add a default height */
   font-family: Arial, sans-serif;
   background-color: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   border-radius: 4px;
   z-index: 9999;
+  resize: both;
+  overflow: auto;
 }
 
-.web-page-saver-header {
+.web-page-saver-resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+  cursor: nwse-resize;
   background-color: #4CAF50;
-  color: white;
-  padding: 10px;
-  cursor: move;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-
-.web-page-saver-header button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-}
-
-.web-page-saver-edit i,
-.web-page-saver-toggle i {
-  color: white;
-  font-size: 16px;
+  border-radius: 0 0 4px 0;
 }
 
 .web-page-saver-content {
-  padding: 10px;
-  max-height: 300px;
+  height: calc(100% - 40px); /* Adjust height to account for header */
   overflow-y: auto;
   border: 1px solid #ccc;
   border-top: none;
