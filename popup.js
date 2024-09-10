@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   const exportButton = document.getElementById('export-data');
   const importButton = document.getElementById('import-data');
+  const supportMeButton = document.getElementById('support-me');
 
   console.log('UI elements initialized');
 
@@ -82,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     darkModeToggle.addEventListener('click', toggleDarkMode);
     exportButton.addEventListener('click', exportData);
     importButton.addEventListener('click', importData);
+    supportMeButton.addEventListener('click', openSupportMePage);
     document.addEventListener('keydown', handleKeyboardShortcuts);
     richTextEditorElement.addEventListener('input', scheduleAutoSave);
 
@@ -265,6 +267,11 @@ document.addEventListener('DOMContentLoaded', function() {
       reader.readAsText(file);
     };
     input.click();
+  }
+
+  // Function to open the support me page
+  function openSupportMePage() {
+    chrome.tabs.create({ url: 'https://buymeacoffee.com/ziruichen97' });
   }
 
   // Function to load and display saved links

@@ -380,3 +380,20 @@ body.dark-mode .web-page-saver-content {
 body.dark-mode #autosave-indicator {
   background-color: rgba(139, 195, 74, 0.8);
 }
+
+#support-me {
+  background-color: #FF69B4; /* A pink color */
+  color: white;
+}
+
+#support-me:hover {
+  background-color: #FF1493; /* A darker pink on hover */
+}
+
+body.dark-mode #support-me {
+  background-color: #C71585; /* A darker pink for dark mode */
+}
+
+body.dark-mode #support-me:hover {
+  background-color: #DB7093; /* A lighter pink on hover in dark mode */
+}
