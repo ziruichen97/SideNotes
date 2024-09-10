@@ -274,11 +274,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const savedLinks = result.savedLinks || [];
       reviewLinksList.innerHTML = '<button id="back-to-menu">Back to Menu</button>';
       savedLinks.forEach(link => {
-        const linkElement = document.createElement('div');
+        const linkElement = document.createElement('li');
         linkElement.innerHTML = `
           <a href="${link.url}" target="_blank">${link.alias || link.url}</a>
-          <button class="edit-link" data-url="${link.url}">Edit</button>
-          <button class="delete-link" data-url="${link.url}">Delete</button>
+          <div class="link-actions">
+            <button class="edit-link" data-url="${link.url}">Edit</button>
+            <button class="delete-link" data-url="${link.url}">Delete</button>
+          </div>
         `;
         reviewLinksList.appendChild(linkElement);
       });
