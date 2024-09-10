@@ -46,6 +46,7 @@ function injectStyles() {
       border-top: none;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
+      padding: 10px;
     }
     .web-page-saver-notes-content {
       font-family: Arial, sans-serif;
@@ -57,8 +58,9 @@ function injectStyles() {
     }
     .web-page-saver-notes-content ul,
     .web-page-saver-notes-content ol {
+      margin-left: 0;
       padding-left: 20px;
-      margin: 10px 0;
+      list-style-position: outside;
     }
     .web-page-saver-notes-content ul {
       list-style-type: disc !important;
@@ -138,6 +140,12 @@ function injectStyles() {
     .web-page-saver-resize-handle.bottom { bottom: -5px; cursor: ns-resize; }
     .web-page-saver-resize-handle.left { left: -5px; cursor: ew-resize; }
     .web-page-saver-resize-handle:hover { background-color: rgba(69, 160, 73, 0.2); }
+
+    .web-page-saver-notes-wrapper {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -157,7 +165,7 @@ injectFontAwesome();
 
 // Function to update the notes display
 function updateNotesDisplay(linkData) {
-  console.log('Updating notes display:', linkData);
+  console.log('Link data received:', linkData);
   let notesElement = document.querySelector('.web-page-saver-notes');
   if (!notesElement) {
     notesElement = document.createElement('div');
@@ -182,7 +190,7 @@ function updateNotesDisplay(linkData) {
       </div>
     </div>
     <div class="web-page-saver-content">
-      <div class="web-page-saver-notes-content">${linkData.notes}</div>
+      <div class="web-page-saver-notes-content"></div>
     </div>
     <div class="web-page-saver-resize-handle top-left"></div>
     <div class="web-page-saver-resize-handle top-right"></div>
@@ -193,6 +201,10 @@ function updateNotesDisplay(linkData) {
     <div class="web-page-saver-resize-handle bottom"></div>
     <div class="web-page-saver-resize-handle left"></div>
   `;
+
+  const notesContent = notesElement.querySelector('.web-page-saver-notes-content');
+  setInnerHTML(notesContent, linkData.notes);
+  console.log('Notes content set:', notesContent.innerHTML);
 
   const toggleButton = notesElement.querySelector('.web-page-saver-toggle');
   const editButton = notesElement.querySelector('.web-page-saver-edit');
@@ -234,6 +246,8 @@ function updateNotesDisplay(linkData) {
       updateDarkModeIcon(darkModeButton, true);
     }
   });
+
+  console.log('Notes display updated');
 }
 
 // Function to update the dark mode icon
@@ -420,3 +434,17 @@ checkForSavedNotes();
 
 // Also check for saved notes when the page loads (for single-page applications)
 window.addEventListener('load', checkForSavedNotes, { passive: true });
+
+function setInnerHTML(element, html) {
+  // Wrap the content in a div with a specific class
+  element.innerHTML = `<div class="web-page-saver-notes-wrapper">${html}</div>`;
+  console.log('Inner HTML set:', element.innerHTML);
+
+  // Handle scripts if necessary
+  Array.from(element.querySelectorAll("script")).forEach(oldScript => {
+    const newScript = document.createElement("script");
+    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}

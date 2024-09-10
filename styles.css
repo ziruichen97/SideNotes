@@ -188,12 +188,12 @@ button i {
 
 /* Styles for formatted content */
 #rich-text-editor ul, #rich-text-editor ol {
-  margin-left: 20px;
+  margin-left: 15px;  /* Reduced from 20px */
+  padding-left: 10px; /* Reduced from 15px */
 }
 
-#rich-text-editor a {
-  color: #0000EE;
-  text-decoration: underline;
+#rich-text-editor li {
+  margin-bottom: 3px; /* Reduced from 5px */
 }
 
 #alias {
