@@ -1,42 +1,59 @@
-# Privacy Policy for Web Page Saver
+# Privacy Policy for SideNotes
 
-Web Page Saver is committed to protecting your privacy. This Privacy Policy explains how we handle information in relation to our Chrome extension.
+Last updated: [2024.9.10]
 
-## Data Collection and Usage
+## Introduction
 
-Web Page Saver does not collect, transmit, or store any personal data on external servers. All information saved through the extension (including bookmarked pages, notes, and preferences) is stored locally in your browser using Chrome's storage API.
+SideNotes is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our browser extension.
 
-## Data Storage
+## Information Collection and Use
 
-The following data is stored locally in your browser:
+### Local Storage
+SideNotes stores all user data locally on your device using browser storage mechanisms. This includes:
+- Saved webpages and their associated notes
+- User preferences (e.g., dark mode settings)
+- Extension configuration
 
-- URLs of saved webpages
-- Custom notes associated with saved webpages
-- Aliases for saved webpages
-- Dark mode preference
+We do not transmit or store any of this information on external servers.
 
-This data is only accessible on your local device and is not shared with the extension developers or any third parties.
+### Permissions
+SideNotes requires certain browser permissions to function:
+- "storage": To save and retrieve your notes and preferences locally
+- "activeTab": To interact with the current tab for saving and displaying notes
+- "scripting": To inject content scripts for the notes overlay
+- "tabs": To access tab information for saving and retrieving notes
 
-## Permissions
+## Data Security
 
-The extension requires certain permissions to function properly:
+We implement security measures to protect your locally stored data:
+- All data is stored using browser-provided encryption mechanisms
+- The extension does not have access to or transmit data from other websites or extensions
 
-- `storage`: To save and retrieve your bookmarked pages and notes locally.
-- `activeTab`: To interact with the current tab for saving the current page.
-- `scripting`: To inject necessary scripts for the extension's functionality.
+## Third-Party Services
 
-These permissions are used solely for the purpose of providing the extension's core features and do not involve data collection or transmission.
+SideNotes does not use any third-party analytics or tracking services. The only third-party resource used is Font Awesome for icons, which is included locally and does not transmit any data.
 
-## Data Export and Import
+## Data Sharing and Transfer
 
-The extension provides functionality to export and import your saved data. This process is entirely under your control and does not involve any external servers. The exported data file is created and saved locally on your device.
+We do not share, sell, rent, or trade any of your information with third parties.
+
+## User Rights
+
+As all data is stored locally on your device, you have full control over your information. You can:
+- View, edit, or delete your saved notes at any time through the extension interface
+- Export your data for backup purposes
+- Uninstall the extension to remove all associated data from your device
 
 ## Changes to This Privacy Policy
 
-We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
 
 ## Contact Us
 
-If you have any questions about this Privacy Policy, please open an issue in the GitHub repository.
+If you have any questions about this Privacy Policy, please contact us at:
 
-Last updated: [2024.9.10]
+[ziruichen97]
+[zirui.chen97@gmail.com]
+
+## Consent
+By using SideNotes, you consent to our Privacy Policy and agree to its terms.
