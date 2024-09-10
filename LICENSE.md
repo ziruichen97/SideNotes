@@ -27,7 +27,7 @@ Copyright (c) [ziruichen97]
 For commercial use or licensing inquiries, please contact:
 
 [ziruichen97]
-[ziruichen97@gmail.com]
+[zirui.chen97@gmail.com]
 
 ## Third-Party Components
 
