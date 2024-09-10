@@ -1,48 +1,53 @@
-# Web Page Saver
+# SideNotes
 
-Web Page Saver is a Chrome extension that allows users to save webpages for later reading with custom notes. It provides a convenient way to bookmark pages, add personal notes, and review saved content.
+SideNotes is a browser extension that allows users to save webpages for later reading and add custom notes to them.
 
 ## Features
 
-- Save current webpage with custom notes
-- Rich text editor for note-taking
-- Review and manage saved links
+- Save webpages with custom notes
+- Review saved links
+- Rich text editor for notes
 - Dark mode support
-- Export and import saved data
-- Keyboard shortcuts for quick actions
+- Resizable and draggable notes overlay
+- Export and import data
 
 ## Installation
 
 1. Clone this repository or download the ZIP file.
-2. Open Chrome and navigate to `chrome://extensions`.
-3. Enable "Developer mode" in the top right corner.
-4. Click "Load unpacked" and select the directory containing the extension files.
+2. Open your browser's extension page (e.g., chrome://extensions for Chrome).
+3. Enable "Developer mode".
+4. Click "Load unpacked" and select the extension directory.
 
 ## Usage
 
-1. Click the extension icon to open the popup.
-2. Use "Add Current Page" to save the current webpage.
-3. Add notes using the rich text editor.
-4. Review saved links using the "Review Saved Links" button.
-5. Toggle dark mode for comfortable viewing in low-light environments.
-6. Export your data for backup or import previously exported data.
+1. Click the SideNotes icon in your browser toolbar to open the popup.
+2. Use "Add Current Page" to save the current webpage with notes.
+3. Use "Review Saved Links" to view and manage your saved pages.
+4. Click the SideNotes overlay on any saved page to view or edit your notes.
 
-## Keyboard Shortcuts
+## Development
 
-- `Ctrl + S`: Save the current page (when the popup is open)
+To set up the development environment:
 
-## Privacy
-
-This extension does not collect or transmit any personal data. All saved information is stored locally in your browser. For more details, please see the [Privacy Policy](PRIVACY.md).
+1. Clone the repository: `git clone https://github.com/yourusername/sidenotes.git`
+2. Navigate to the project directory: `cd sidenotes`
+3. Make your changes and test the extension locally.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under a custom license - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
-- [Font Awesome](https://fontawesome.com/) - Used for icons in the extension interface. Font Awesome is licensed under the [Font Awesome Free License](https://fontawesome.com/license/free).
+See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) for a list of third-party resources used in this project.
+
+## Contact
+
+For commercial use or licensing inquiries, please contact:
+
+[ziruichen97]
+[zirui.chen97@gmail.com]
