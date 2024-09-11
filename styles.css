@@ -1,6 +1,11 @@
+*{
+  font-family:  'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+}
+
 body {
-  width: 250px; /* Reduced from 300px */
-  padding: 10px;
+  width: 260px; /* Reduced from 300px */
+  padding: 0px;
   font-family: Arial, sans-serif;
 }
 
@@ -30,7 +35,7 @@ button:hover {
 /* Icon styles */
 button i {
   margin-right: 8px; /* Add some space between icon and text */
-  width: 16px; /* Set a fixed width for icons */
+  width: 10px; /* Set a fixed width for icons */
   text-align: center; /* Center the icon */
 }
 
@@ -85,7 +90,12 @@ button i {
 }
 
 /* Styles for the popup */
-#main-menu,
+#main-menu {
+  background-color: white;
+  padding: 10px;
+  /* border-radius: 10px; */
+}
+
 #add-link-form,
 #review-links-list {
   background-color: white;
@@ -394,13 +404,14 @@ body.dark-mode #autosave-indicator {
   border-radius: 4px;
   text-align: center;
   transition: background-color 0.3s;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
 }
 
 #support-me {
   background-color: #FF69B4;
   color: white;
-  border: none;
-  margin-right: 5px;
 }
 
 #support-me:hover {
@@ -419,6 +430,14 @@ body.dark-mode #autosave-indicator {
 }
 
 /* Dark mode styles */
+body.dark-mode {
+  background-color: #222;
+}
+
+body.dark-mode #main-menu {
+  background-color: #333;
+}
+
 body.dark-mode #support-me {
   background-color: #C71585;
 }
@@ -462,14 +481,14 @@ body.dark-mode #support-me {
   background-color: #C71585;
 }
 
-body.dark-mode #support-me:hover {
+body.dark.mode #support-me:hover {
   background-color: #DB7093;
 }
 
-body.dark-mode #github-link {
+body.dark.mode #github-link {
   background-color: #555;
 }
 
-body.dark-mode #github-link:hover {
+body.dark.mode #github-link:hover {
   background-color: #777;
 }
