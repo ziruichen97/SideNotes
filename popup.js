@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const exportButton = document.getElementById('export-data');
   const importButton = document.getElementById('import-data');
   const supportMeButton = document.getElementById('support-me');
+  const githubButton = document.getElementById('github-link');
 
   console.log('UI elements initialized');
 
@@ -84,6 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
     exportButton.addEventListener('click', exportData);
     importButton.addEventListener('click', importData);
     supportMeButton.addEventListener('click', openSupportMePage);
+    githubButton.addEventListener('click', function() {
+      chrome.tabs.create({ url: 'https://github.com/yourusername/yourrepository' });
+    });
     document.addEventListener('keydown', handleKeyboardShortcuts);
     richTextEditorElement.addEventListener('input', scheduleAutoSave);
 

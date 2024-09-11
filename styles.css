@@ -381,19 +381,95 @@ body.dark-mode #autosave-indicator {
   background-color: rgba(139, 195, 74, 0.8);
 }
 
+#support-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+#support-me, #github-link {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
 #support-me {
-  background-color: #FF69B4; /* A pink color */
+  background-color: #FF69B4;
   color: white;
+  border: none;
+  margin-right: 5px;
 }
 
 #support-me:hover {
-  background-color: #FF1493; /* A darker pink on hover */
+  background-color: #FF1493;
 }
 
+#github-link {
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+#github-link:hover {
+  background-color: #555;
+}
+
+/* Dark mode styles */
 body.dark-mode #support-me {
-  background-color: #C71585; /* A darker pink for dark mode */
+  background-color: #C71585;
 }
 
 body.dark-mode #support-me:hover {
-  background-color: #DB7093; /* A lighter pink on hover in dark mode */
+  background-color: #DB7093;
+}
+
+body.dark-mode #github-link {
+  background-color: #555;
+}
+
+body.dark-mode #github-link:hover {
+  background-color: #777;
+}
+
+#support-me {
+  background-color: #FF69B4;
+  color: white;
+  border: none;
+  margin-right: 5px;
+}
+
+#support-me:hover {
+  background-color: #FF1493;
+}
+
+#github-link {
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+#github-link:hover {
+  background-color: #555;
+}
+
+/* Dark mode styles */
+body.dark-mode #support-me {
+  background-color: #C71585;
+}
+
+body.dark-mode #support-me:hover {
+  background-color: #DB7093;
+}
+
+body.dark-mode #github-link {
+  background-color: #555;
+}
+
+body.dark-mode #github-link:hover {
+  background-color: #777;
 }
