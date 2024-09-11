@@ -347,7 +347,7 @@ function makeResizable(element) {
       const newWidth = startWidth + dx;
       if (newWidth > 200) {
         element.style.width = newWidth + 'px';
-        header.style.width = newWidth + 'px';
+        header.style.width = (newWidth - 5) + 'px'; // Subtract 5px for the resize handle
       }
     }
     if (currentHandle.classList.contains('bottom') || currentHandle.classList.contains('bottom-right') || currentHandle.classList.contains('bottom-left')) {
@@ -358,7 +358,7 @@ function makeResizable(element) {
       const newWidth = startWidth - dx;
       if (newWidth > 200) {
         element.style.width = newWidth + 'px';
-        header.style.width = newWidth + 'px';
+        header.style.width = (newWidth - 5) + 'px'; // Subtract 5px for the resize handle
         element.style.left = startLeft + dx + 'px';
       }
     }
@@ -404,7 +404,7 @@ function loadSavedSize(element) {
       const header = element.querySelector('.web-page-saver-header');
       const headerHeight = header.offsetHeight;
       body.style.height = (result.notesOverlaySize.height - headerHeight) + 'px';
-      header.style.width = `${result.notesOverlaySize.width}px`;
+      header.style.width = `${result.notesOverlaySize.width - 5}px`; // Subtract 5px for the resize handle
     }
   });
 }
