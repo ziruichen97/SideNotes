@@ -39,7 +39,7 @@ function injectStyles() {
       margin-right: 10px;
       color: white;
     }
-    .web-page-saver-content {
+    .web-page-saver-body {
       flex-grow: 1;
       overflow-y: auto;
       border: 1px solid #ccc;
@@ -48,7 +48,7 @@ function injectStyles() {
       border-bottom-right-radius: 4px;
       padding: 10px;
     }
-    .web-page-saver-notes-content {
+    .web-page-saver-content {
       font-family: Arial, sans-serif;
       font-size: 14px;
       line-height: 1.5;
@@ -100,7 +100,7 @@ function injectStyles() {
     .web-page-saver-notes.dark-mode .web-page-saver-header {
       background-color: #222;
     }
-    .web-page-saver-notes.dark-mode .web-page-saver-content {
+    .web-page-saver-notes.dark-mode .web-page-saver-body {
       border-color: #666;
       background-color: #444;
     }
@@ -188,17 +188,19 @@ function updateNotesDisplay(linkData) {
         </button>
       </div>
     </div>
-    <div class="web-page-saver-content">
-      <div class="web-page-saver-notes-content"></div>
+    <div class="web-page-saver-body">
+      <div class="web-page-saver-content">
+        <div class="web-page-saver-notes-content"></div>
+      </div>
+      <div class="web-page-saver-resize-handle top-left"></div>
+      <div class="web-page-saver-resize-handle top-right"></div>
+      <div class="web-page-saver-resize-handle bottom-left"></div>
+      <div class="web-page-saver-resize-handle bottom-right"></div>
+      <div class="web-page-saver-resize-handle top"></div>
+      <div class="web-page-saver-resize-handle right"></div>
+      <div class="web-page-saver-resize-handle bottom"></div>
+      <div class="web-page-saver-resize-handle left"></div>
     </div>
-    <div class="web-page-saver-resize-handle top-left"></div>
-    <div class="web-page-saver-resize-handle top-right"></div>
-    <div class="web-page-saver-resize-handle bottom-left"></div>
-    <div class="web-page-saver-resize-handle bottom-right"></div>
-    <div class="web-page-saver-resize-handle top"></div>
-    <div class="web-page-saver-resize-handle right"></div>
-    <div class="web-page-saver-resize-handle bottom"></div>
-    <div class="web-page-saver-resize-handle left"></div>
   `;
 
   const notesContent = notesElement.querySelector('.web-page-saver-notes-content');
@@ -208,14 +210,38 @@ function updateNotesDisplay(linkData) {
   const toggleButton = notesElement.querySelector('.web-page-saver-toggle');
   const editButton = notesElement.querySelector('.web-page-saver-edit');
   const darkModeButton = notesElement.querySelector('.web-page-saver-dark-mode');
-  const content = notesElement.querySelector('.web-page-saver-content');
+  const body = notesElement.querySelector('.web-page-saver-body');
+  const header = notesElement.querySelector('.web-page-saver-header');
+
+  let originalWidth, originalHeight, originalLeft, originalBottom;
 
   toggleButton.addEventListener('click', function() {
-    if (content.style.display === 'none') {
-      content.style.display = 'block';
+    if (body.style.display === 'none') {
+      // Expanding
+      body.style.display = 'block';
+      notesElement.style.width = originalWidth;
+      notesElement.style.height = originalHeight;
+      notesElement.style.left = originalLeft;
+      notesElement.style.bottom = originalBottom;
+      header.style.width = originalWidth;
       toggleButton.innerHTML = '<i class="fas fa-minus"></i>';
     } else {
-      content.style.display = 'none';
+      // Shrinking
+      originalWidth = notesElement.style.width;
+      originalHeight = notesElement.style.height;
+      originalLeft = notesElement.style.left;
+      originalBottom = notesElement.style.bottom;
+      
+      const rect = notesElement.getBoundingClientRect();
+      const newLeft = rect.right - 100 + 'px';
+      const newBottom = rect.top + 'px';
+      
+      body.style.display = 'none';
+      notesElement.style.width = '100px';
+      notesElement.style.height = '20px';
+      notesElement.style.left = newLeft;
+      notesElement.style.bottom = newBottom;
+      header.style.width = '100px';
       toggleButton.innerHTML = '<i class="fas fa-plus"></i>';
     }
   });
@@ -288,7 +314,8 @@ function makeDraggable(element) {
 // Function to make the notes overlay resizable
 function makeResizable(element) {
   const resizeHandles = element.querySelectorAll('.web-page-saver-resize-handle');
-  const content = element.querySelector('.web-page-saver-content');
+  const body = element.querySelector('.web-page-saver-body');
+  const header = element.querySelector('.web-page-saver-header');
   let isResizing = false;
   let currentHandle = null;
   let startX, startY, startWidth, startHeight, startLeft, startTop;
@@ -318,7 +345,10 @@ function makeResizable(element) {
     
     if (currentHandle.classList.contains('right') || currentHandle.classList.contains('bottom-right') || currentHandle.classList.contains('top-right')) {
       const newWidth = startWidth + dx;
-      if (newWidth > 200) element.style.width = newWidth + 'px';
+      if (newWidth > 200) {
+        element.style.width = newWidth + 'px';
+        header.style.width = newWidth + 'px';
+      }
     }
     if (currentHandle.classList.contains('bottom') || currentHandle.classList.contains('bottom-right') || currentHandle.classList.contains('bottom-left')) {
       const newHeight = startHeight + dy;
@@ -328,6 +358,7 @@ function makeResizable(element) {
       const newWidth = startWidth - dx;
       if (newWidth > 200) {
         element.style.width = newWidth + 'px';
+        header.style.width = newWidth + 'px';
         element.style.left = startLeft + dx + 'px';
       }
     }
@@ -339,9 +370,9 @@ function makeResizable(element) {
       }
     }
     
-    // Adjust content height
-    const headerHeight = element.querySelector('.web-page-saver-header').offsetHeight;
-    content.style.height = (element.offsetHeight - headerHeight) + 'px';
+    // Adjust body height
+    const headerHeight = header.offsetHeight;
+    body.style.height = (element.offsetHeight - headerHeight) + 'px';
   }
 
   function stopResize() {
@@ -368,10 +399,12 @@ function loadSavedSize(element) {
       element.style.width = `${result.notesOverlaySize.width}px`;
       element.style.height = `${result.notesOverlaySize.height}px`;
       
-      // Adjust content height
-      const content = element.querySelector('.web-page-saver-content');
-      const headerHeight = element.querySelector('.web-page-saver-header').offsetHeight;
-      content.style.height = (result.notesOverlaySize.height - headerHeight) + 'px';
+      // Adjust body height and header width
+      const body = element.querySelector('.web-page-saver-body');
+      const header = element.querySelector('.web-page-saver-header');
+      const headerHeight = header.offsetHeight;
+      body.style.height = (result.notesOverlaySize.height - headerHeight) + 'px';
+      header.style.width = `${result.notesOverlaySize.width}px`;
     }
   });
 }
