@@ -1,6 +1,6 @@
 # Custom License for SideNotes Extension
 
-Copyright (c) [ziruichen97]
+Copyright (c) [ZIRUI CHEN]
 
 ## Permissions
 
@@ -26,7 +26,7 @@ Copyright (c) [ziruichen97]
 
 For commercial use or licensing inquiries, please contact:
 
-[ziruichen97]
+[ZIRUI CHEN]
 [zirui.chen97@gmail.com]
 
 ## Third-Party Components

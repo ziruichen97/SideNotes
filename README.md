@@ -1,6 +1,6 @@
 # SideNotes
 
-SideNotes is a browser extension that allows users to save webpages for later reading and add custom notes to them.
+"SideNotes" is a browser extension that allows users to save webpages for later reading and add custom notes to them. All notes are saved in a local database, and users can review and manage their saved links and notes through the extension's popup interface. When you reopen the extension, you can still see the existing notes and continue to add new notes to the saved webpages.It will boost your productivity and reading experience. Hop on to the chrome web store to check it out!
 
 ## Features
 
