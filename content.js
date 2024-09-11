@@ -23,10 +23,10 @@ function injectStyles() {
     .web-page-saver-header {
       background-color: #4CAF50;
       color: white;
-      padding: 10px;
+      padding: 3px;
       cursor: move;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
@@ -36,7 +36,7 @@ function injectStyles() {
       border: none;
       cursor: pointer;
       padding: 0;
-      margin-left: 10px;
+      margin-right: 10px;
       color: white;
     }
     .web-page-saver-content {
@@ -176,7 +176,6 @@ function updateNotesDisplay(linkData) {
   
   notesElement.innerHTML = `
     <div class="web-page-saver-header">
-      <span>Saved Notes</span>
       <div>
         <button class="web-page-saver-dark-mode" title="Toggle Dark Mode">
           <i class="fas fa-moon"></i>

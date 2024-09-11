@@ -5,7 +5,7 @@
 
 body {
   width: 260px; /* Reduced from 300px */
-  padding: 0px;
+  padding: 10px;
   font-family: Arial, sans-serif;
 }
 
@@ -93,7 +93,7 @@ button i {
 #main-menu {
   background-color: white;
   padding: 10px;
-  /* border-radius: 10px; */
+  border-radius: 15px;
 }
 
 #add-link-form,
@@ -179,6 +179,36 @@ button i {
 #editor-toolbar label[for="text-color"]:hover,
 #editor-toolbar label[for="background-color"]:hover {
   background-color: #e0e0e0;
+}
+
+.editor-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 10px;
+  background-color: #ffffff;
+  color: #333;
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
+
+.editor-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.editor-btn i {
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 #rich-text-editor {
@@ -281,9 +311,9 @@ button i {
   cursor: pointer;
 }
 
-#editor-toolbar .color-dropdown > button {
+/* #editor-toolbar .color-dropdown > button {
   padding: 5px 10px;
-}
+} */
 
 /* Dark mode styles */
 body.dark-mode {

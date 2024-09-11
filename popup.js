@@ -43,31 +43,31 @@ document.addEventListener('DOMContentLoaded', function() {
   function createEditorToolbar() {
     return `
       <div id="editor-toolbar">
-        <button data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
-        <button data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
-        <button data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
-        <button data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
-        <button data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
-        <button data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
-        <button data-command="removeFormat" title="Clear Formatting"><i class="fas fa-remove-format"></i></button>
+        <button class="editor-btn" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+        <button class="editor-btn" data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+        <button class="editor-btn" data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+        <button class="editor-btn" data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+        <button class="editor-btn" data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+        <button class="editor-btn" data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+        <button class="editor-btn" data-command="removeFormat" title="Clear Formatting"><i class="fas fa-remove-format"></i></button>
         <div class="color-dropdown">
-          <button id="text-color-btn" title="Text Color"><i class="fas fa-font"></i></button>
+          <button class="editor-btn" id="text-color-btn" title="Text Color"><i class="fas fa-font"></i></button>
           <div class="color-options" id="text-color-options">
-            <button data-color="#000000" style="background-color: #000000;"></button>
-            <button data-color="#0000FF" style="background-color: #0000FF;"></button>
-            <button data-color="#008000" style="background-color: #008000;"></button>
-            <button data-color="#FF0000" style="background-color: #FF0000;"></button>
-            <button data-color="#800080" style="background-color: #800080;"></button>
+            <button class="editor-btn" data-color="#000000" style="background-color: #000000;"></button>
+            <button class="editor-btn" data-color="#0000FF" style="background-color: #0000FF;"></button>
+            <button class="editor-btn" data-color="#008000" style="background-color: #008000;"></button>
+            <button class="editor-btn" data-color="#FF0000" style="background-color: #FF0000;"></button>
+            <button class="editor-btn" data-color="#800080" style="background-color: #800080;"></button>
           </div>
         </div>
         <div class="color-dropdown">
-          <button id="bg-color-btn" title="Background Color"><i class="fas fa-fill-drip"></i></button>
+          <button class="editor-btn" id="bg-color-btn" title="Background Color"><i class="fas fa-fill-drip"></i></button>
           <div class="color-options" id="bg-color-options">
-            <button data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></button>
-            <button data-color="#FFFF00" style="background-color: #FFFF00;"></button>
-            <button data-color="#00FFFF" style="background-color: #00FFFF;"></button>
-            <button data-color="#FFA500" style="background-color: #FFA500;"></button>
-            <button data-color="#FFC0CB" style="background-color: #FFC0CB;"></button>
+            <button class="editor-btn" data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></button>
+            <button class="editor-btn" data-color="#FFFF00" style="background-color: #FFFF00;"></button>
+            <button class="editor-btn" data-color="#00FFFF" style="background-color: #00FFFF;"></button>
+            <button class="editor-btn" data-color="#FFA500" style="background-color: #FFA500;"></button>
+            <button class="editor-btn" data-color="#FFC0CB" style="background-color: #FFC0CB;"></button>
           </div>
         </div>
       </div>
