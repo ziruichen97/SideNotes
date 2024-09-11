@@ -223,7 +223,7 @@ function updateNotesDisplay(linkData) {
       notesElement.style.height = originalHeight;
       notesElement.style.left = originalLeft;
       notesElement.style.bottom = originalBottom;
-      header.style.width = originalWidth;
+      header.style.width = `${parseInt(originalWidth) - 5}px`; // Subtract 5px for the resize handle
       toggleButton.innerHTML = '<i class="fas fa-minus"></i>';
     } else {
       // Shrinking
@@ -241,7 +241,7 @@ function updateNotesDisplay(linkData) {
       notesElement.style.height = '20px';
       notesElement.style.left = newLeft;
       notesElement.style.bottom = newBottom;
-      header.style.width = '100px';
+      header.style.width = '95px'; // 100px - 5px for the resize handle
       toggleButton.innerHTML = '<i class="fas fa-plus"></i>';
     }
   });
