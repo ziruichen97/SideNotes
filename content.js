@@ -213,37 +213,77 @@ function updateNotesDisplay(linkData) {
   const body = notesElement.querySelector('.web-page-saver-body');
   const header = notesElement.querySelector('.web-page-saver-header');
 
-  let originalWidth, originalHeight, originalLeft, originalBottom;
+  let isExpanded = true;
+  let rightEdgePosition;
+  let originalWidth, originalHeight;
+
+  function updateRightEdgePosition(element) {
+    const rect = element.getBoundingClientRect();
+    rightEdgePosition = rect.right;
+  }
+
+  function makeDraggable(element) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    element.querySelector('.web-page-saver-header').addEventListener('mousedown', dragMouseDown);
+
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.addEventListener('mouseup', closeDragElement);
+      document.addEventListener('mousemove', elementDrag);
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      element.style.top = (element.offsetTop - pos2) + "px";
+      element.style.left = (element.offsetLeft - pos1) + "px";
+      updateRightEdgePosition(element);
+    }
+
+    function closeDragElement() {
+      document.removeEventListener('mouseup', closeDragElement);
+      document.removeEventListener('mousemove', elementDrag);
+      updateRightEdgePosition(element);
+    }
+  }
 
   toggleButton.addEventListener('click', function() {
-    if (body.style.display === 'none') {
-      // Expanding
-      body.style.display = 'block';
-      notesElement.style.width = originalWidth;
-      notesElement.style.height = originalHeight;
-      notesElement.style.left = originalLeft;
-      notesElement.style.bottom = originalBottom;
-      header.style.width = `${parseInt(originalWidth) - 5}px`; // Subtract 5px for the resize handle
-      toggleButton.innerHTML = '<i class="fas fa-minus"></i>';
-    } else {
+    if (isExpanded) {
       // Shrinking
       originalWidth = notesElement.style.width;
       originalHeight = notesElement.style.height;
-      originalLeft = notesElement.style.left;
-      originalBottom = notesElement.style.bottom;
+      updateRightEdgePosition(notesElement);
       
-      const rect = notesElement.getBoundingClientRect();
-      const newLeft = rect.right - 100 + 'px';
-      const newBottom = rect.top + 'px';
+      const newLeft = (rightEdgePosition - 100) + 'px'; // Ensures 100px width
       
       body.style.display = 'none';
       notesElement.style.width = '100px';
       notesElement.style.height = '20px';
       notesElement.style.left = newLeft;
-      notesElement.style.bottom = newBottom;
-      header.style.width = '95px'; // 100px - 5px for the resize handle
+      // Top position remains unchanged
+      header.style.width = '95px';
       toggleButton.innerHTML = '<i class="fas fa-plus"></i>';
+    } else {
+      // Expanding
+      const newLeft = (rightEdgePosition - parseInt(originalWidth)) + 'px';
+      
+      body.style.display = 'block';
+      notesElement.style.width = originalWidth;
+      notesElement.style.height = originalHeight;
+      notesElement.style.left = newLeft;
+      // Top position remains unchanged
+      
+      header.style.width = `${parseInt(originalWidth) - 5}px`;
+      toggleButton.innerHTML = '<i class="fas fa-minus"></i>';
     }
+    isExpanded = !isExpanded;
   });
 
   editButton.addEventListener('click', function() {
@@ -272,43 +312,15 @@ function updateNotesDisplay(linkData) {
     }
   });
 
+  // Initial setup
+  updateRightEdgePosition(notesElement);
+
   console.log('Notes display updated');
 }
 
 // Function to update the dark mode icon
 function updateDarkModeIcon(button, isDarkMode) {
   button.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-}
-
-// Function to make the notes overlay draggable
-function makeDraggable(element) {
-  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  element.querySelector('.web-page-saver-header').addEventListener('mousedown', dragMouseDown, { passive: true });
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.addEventListener('mouseup', closeDragElement, { passive: true });
-    document.addEventListener('mousemove', elementDrag, { passive: true });
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    element.style.top = (element.offsetTop - pos2) + "px";
-    element.style.left = (element.offsetLeft - pos1) + "px";;
-  }
-
-  function closeDragElement() {
-    document.removeEventListener('mouseup', closeDragElement, { passive: true });
-    document.removeEventListener('mousemove', elementDrag, { passive: true });
-  }
 }
 
 // Function to make the notes overlay resizable
