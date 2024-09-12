@@ -1,33 +1,42 @@
-# Custom License for SideNotes Extension
+# Dual License
 
-Copyright (c) [ZIRUI CHEN]
+This software is licensed under two distinct licenses:
 
-## Permissions
+1. For non-commercial use: MIT License
+2. For commercial use: Custom Commercial License
 
-1. **Use and Modification**: This software is free to use and modify for personal and non-commercial purposes.
+## Non-Commercial Use (MIT License)
 
-2. **Distribution**: You may distribute copies of the original or modified software, provided that you include this license and copyright notice with each copy.
+MIT License
 
-## Restrictions
+Copyright (c) 2024 [ZIRUI CHEN]
 
-1. **Commercial Use**: Any commercial use, including but not limited to selling the software, incorporating it into a commercial product, or using it in a commercial service, requires explicit written permission from the copyright holder and may be subject to licensing fees.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-2. **Sublicensing**: You may not sublicense the software or any derivative works without explicit permission from the copyright holder.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-## Conditions
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-1. **Attribution**: You must give appropriate credit to the original author, provide a link to this license, and indicate if changes were made.
+## Commercial Use
 
-2. **No Warranty**: The software is provided "as is", without warranty of any kind, express or implied.
-
-3. **Liability**: In no event shall the authors or copyright holders be liable for any claim, damages, or other liability arising from the use of the software.
-
-## Commercial Licensing
-
-For commercial use or licensing inquiries, please contact:
+For commercial use of this software, please contact the author to obtain a commercial license:
 
 [ZIRUI CHEN]
 [zirui.chen97@gmail.com]
+
+Commercial use without a valid license is strictly prohibited.
 
 ## Third-Party Components
 
