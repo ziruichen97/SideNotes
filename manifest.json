@@ -31,7 +31,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["fontawesome-free-6.6.0-web/css/all.css", "fontawesome-free-6.6.0-web/webfonts/*", "edit.png"],
+      "resources": ["fontawesome-free-6.6.0-web/css/all.css", "fontawesome-free-6.6.0-web/webfonts/*"],
       "matches": ["<all_urls>"]
     }
   ],

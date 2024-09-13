@@ -4,14 +4,6 @@ This project, SideNotes, is licensed under a custom license that allows free use
 
 This project uses the following third-party resources:
 
-## Icons
-
-- <i class="fa-solid fa-pen-to-square"></i> Edit icon: 
-  - Source: [Flaticon](https://www.flaticon.com/free-icons/edit)
-  - Creator: Kiranshastry
-  - License: [Flaticon License](https://www.freepikcompany.com/legal#nav-flaticon)
-  - Attribution: <a href="https://www.flaticon.com/free-icons/edit" title="edit icons">Edit icons created by Kiranshastry - Flaticon</a>
-
 ## Libraries
 
 - <i class="fa-brands fa-font-awesome"></i> Font Awesome:
