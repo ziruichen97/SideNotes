@@ -24,7 +24,7 @@ Unacceptable behavior includes:
 ## How to Contribute
 
 1. Fork the repository on GitHub.
-2. Clone your fork locally: `git clone https://github.com/your-username/sidenotes.git`
+2. Clone your fork locally: `git clone https://github.com/ziruichen97/sidenotes.git`
 3. Create a new branch for your feature or bug fix: `git checkout -b your-branch-name`
 4. Make your changes in your branch.
 5. Add or update tests as necessary.

@@ -29,7 +29,7 @@
 
 To set up the development environment:
 
-1. Clone the repository: `git clone https://github.com/yourusername/sidenotes.git`
+1. Clone the repository: `git clone https://github.com/ziruichen97/sidenotes.git`
 2. Navigate to the project directory: `cd sidenotes`
 3. Make your changes and test the extension locally.
 
