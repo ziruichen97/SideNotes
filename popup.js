@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     importButton.addEventListener('click', importData);
     supportMeButton.addEventListener('click', openSupportMePage);
     githubButton.addEventListener('click', function() {
-      chrome.tabs.create({ url: 'https://github.com/yourusername/yourrepository' });
+      chrome.tabs.create({ url: 'https://github.com/ziruichen97/SideNotes' });
     });
     document.addEventListener('keydown', handleKeyboardShortcuts);
     richTextEditorElement.addEventListener('input', scheduleAutoSave);
