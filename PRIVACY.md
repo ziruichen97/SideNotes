@@ -23,6 +23,15 @@ SideNotes requires certain browser permissions to function:
 - "scripting": To inject content scripts for the notes overlay
 - "tabs": To access tab information for saving and retrieving notes
 
+## Host Permission Jurisdiction
+
+This extension requests permission to access and interact with web content on the following domains:
+
+- `https://*.example.com/*`
+- `https://api.someservice.com/*`
+
+These permissions are necessary for the core functionality of SideNotes, allowing it to save and interact with webpages on these specified domains. We do not access or collect data from any other websites or domains not listed here.
+
 ## Data Security
 
 We implement security measures to protect your locally stored data:
